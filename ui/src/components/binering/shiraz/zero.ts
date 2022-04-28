@@ -5,23 +5,24 @@ const mainColor = css`red`;
 @customElement('zero-card')
 export class Zero extends LitElement {
   render() {
-    return html` <div class="container">0</div> `;
+    return html` <div class="card">0</div> `;
   }
 
   static get styles() {
     return [
       cssg,
       css`
-        div.container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        div.card {
+          height: 100px;
+          width: 60px;
+          flex: 100px 1 0;
+          border-radius: 5px;
+          margin-bottom: -20px;
+          background-color: ${mainColor};
+          box-shadow: 3px 3px 3px gray;
           color: white;
           font-size: 2em;
-          height: 100px;
-          width: 100px;
-          background-color: ${mainColor};
-          border: 1px solid black;
+          border: 3px solid #b31414d6;
         }
       `,
     ];

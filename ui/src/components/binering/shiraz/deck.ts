@@ -10,7 +10,7 @@ export class Deck extends LitElement {
   cards!: number[];
 
   render() {
-    return html` <div class="container">
+    return html` <div class="deck">
       ${this.cards.map(card =>
         card == 1 ? html`<zero-card></zero-card>` : html`<one-card></one-card>`
       )}
@@ -21,9 +21,11 @@ export class Deck extends LitElement {
     return [
       cssg,
       css`
-        div.container {
-          display: grid;
-          grid-row-gap: 0.1em;
+        div.deck {
+          display: flex;
+          height: 200px;
+          flex-direction: column;
+          /* grid-row-gap: 5em; */
         }
       `,
     ];

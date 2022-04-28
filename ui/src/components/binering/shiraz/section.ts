@@ -42,7 +42,7 @@ export class Section extends LitElement {
         div.container {
           display: grid;
           grid-template-columns: repeat(4, auto);
-          column-gap: 0.1em;
+          column-gap: 0.3em;
         }
       `,
     ];
