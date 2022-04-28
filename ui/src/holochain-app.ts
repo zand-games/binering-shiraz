@@ -8,6 +8,7 @@ import '@material/mwc-circular-progress';
 
 import './components/binering/shiraz/create-game';
 import './components/binering/shiraz/game-detail';
+import './components/binering/shiraz/board';
 import { appWebsocketContext, appInfoContext } from './contexts';
 
 @customElement('holochain-app')
@@ -40,13 +41,14 @@ export class HolochainApp extends LitElement {
       <main>
         <h1>binering-app</h1>
 
-        <create-game
+        <board-game></board-game>
+        <!-- <create-game
           @game-created=${(e: CustomEvent) =>
-            (this.entryHash = e.detail.entryHash)}
+          (this.entryHash = e.detail.entryHash)}
         ></create-game>
         ${this.entryHash
           ? html` <game-detail .entryHash=${this.entryHash}></game-detail> `
-          : html``}
+          : html``} -->
       </main>
     `;
   }
