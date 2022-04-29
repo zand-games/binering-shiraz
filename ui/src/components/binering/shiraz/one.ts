@@ -23,6 +23,11 @@ export class One extends LitElement {
           border: 3px solid #075ac1;
           color: white;
           font-size: 2em;
+
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
         }
       `,
     ];

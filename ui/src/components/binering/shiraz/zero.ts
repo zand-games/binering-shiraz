@@ -23,6 +23,10 @@ export class Zero extends LitElement {
           color: white;
           font-size: 2em;
           border: 3px solid #b31414d6;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
         }
       `,
     ];
