@@ -1,17 +1,23 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './deck';
+import './trash';
 const cards = [1, 1, 1, 1, 0, 0, 0, 0];
 import gcss from '../globalcss';
 @customElement('section-com')
 export class Section extends LitElement {
   render() {
     return html`
-      <div class="container">
-        <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-        <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-        <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-        <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+      <div class="section">
+        <div class="trash">
+          <trash-comp></trash-comp>
+        </div>
+        <div class="decks">
+          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+        </div>
       </div>
     `;
   }
@@ -39,10 +45,17 @@ export class Section extends LitElement {
     return [
       gcss,
       css`
-        div.container {
+        div.decks {
           display: grid;
           grid-template-columns: repeat(4, auto);
           column-gap: 0.3em;
+        }
+
+        div.section {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          align-content: center;
         }
       `,
     ];

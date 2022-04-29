@@ -39,7 +39,7 @@ export class HolochainApp extends LitElement {
 
     return html`
       <main>
-        <h1>binering-app</h1>
+        <h1>Binering Games - Shiraz</h1>
 
         <board-game></board-game>
         <!-- <create-game
