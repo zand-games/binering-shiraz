@@ -51,17 +51,25 @@ export class Trash extends LitElement {
     this.style.opacity = '1';
   }
   droped(e: any) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    debugger;
+    // if (e.preventDefault) {
+    //   e.preventDefault();
+    // }
+    // debugger;
     var zero = e.dataTransfer.getData('zero');
-    if (zero !== '') {
-      this.value = false;
-    } else {
-      this.value = true;
-    }
+    var one = e.dataTransfer.getData('one');
+
+    // if (zero !== '') {
+    //   this.value = false;
+    // } else {
+    //   this.value = true;
+    // }
+    this.value = zero !== '' ? false : true;
     this.style.opacity = '1';
+    debugger;
+    // var rr = e.relatedTarget.getRootNode().host;
+    document.dispatchEvent(
+      new CustomEvent('Card_Remove_Event', { detail: zero !== '' ? zero : one })
+    );
   }
   connectedCallback() {
     super.connectedCallback();

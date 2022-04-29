@@ -8,19 +8,20 @@
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
     "build": "rimraf dist && tsc && rollup -c rollup.config.js",
-    "build:watch": "tsc --watch --preserveWatchOutput",    
+    "build:watch": "tsc --watch --preserveWatchOutput",
     "start": "tsc && concurrently -r \"npm run build:watch\" \"wds\"",
     "package": "npm run build && cd dist && bestzip ../dist.zip *"
   },
   "dependencies": {
-    "@holochain/client": "^0.3.2",
     "@holochain-open-dev/context": "^0.0.3",
+    "@holochain/client": "^0.3.2",
+    "@material/mwc-button": "^0.25.3",
     "@material/mwc-circular-progress": "^0.25.3",
+    "@type-craft/content": "^0.0.7",
+    "@type-craft/title": "^0.0.8",
     "@webcomponents/scoped-custom-element-registry": "0.0.4",
     "lit": "^2.0.2",
-    "@type-craft/title": "^0.0.8",
-    "@type-craft/content": "^0.0.7",
-    "@material/mwc-button": "^0.25.3"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.0",
