@@ -37,10 +37,6 @@ export class Deck extends LitElement {
     document.removeEventListener('Card_Remove_Event', this.cardRemoved);
   }
   cardRemoved(e: any) {
-    // debugger;
-    if (e.detail == this.id) {
-      this.remove();
-    }
     const dataArray = e.detail.split('||');
     let playerId = dataArray[0];
     let deckId = dataArray[1];

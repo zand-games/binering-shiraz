@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
+import _ from 'lodash';
 
 import cssg from '../globalcss';
 
@@ -40,8 +41,6 @@ export class Trash extends LitElement {
     var _playerId = e.dataTransfer.types.toString().split('||')[1];
 
     if (this.value == undefined) {
-      //  game  start
-      /// raise an event that game started....
       if (this.playerId == _playerId) {
         e.preventDefault();
       }
@@ -62,11 +61,19 @@ export class Trash extends LitElement {
     this.style.opacity = '1';
   }
   droped(e: any) {
-    debugger;
     var zero = e.dataTransfer.getData('zero||' + this.playerId);
     var one = e.dataTransfer.getData('one||' + this.playerId);
 
-    this.value = zero !== '' ? false : true;
+    var receivedValue = zero !== '' ? false : true;
+
+    if (this.value == null || this.value == undefined) debugger;
+    document.dispatchEvent(
+      new CustomEvent('First_Player_Selected', {
+        detail: this.playerId + '||' + receivedValue,
+      })
+    );
+
+    this.value = receivedValue;
     this.style.opacity = '1';
 
     document.dispatchEvent(
@@ -75,6 +82,34 @@ export class Trash extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
+    document.addEventListener('First_Player_Selected', e =>
+      this.firstPlayerSelected(e)
+    );
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener(
+      'First_Player_Selected',
+      this.firstPlayerSelected
+    );
+  }
+
+  firstPlayerSelected(e: any) {
+    debugger;
+    const dataArray = e.detail.split('||');
+    const _playerId = dataArray[0];
+    const value = dataArray[1];
+    if (
+      value == null ||
+      value == undefined ||
+      _playerId == null ||
+      _playerId == undefined
+    )
+      return;
+
+    if (_playerId != this.playerId) {
+      this.value = value == 'true' ? false : true;
+    }
   }
 
   classSelector() {
