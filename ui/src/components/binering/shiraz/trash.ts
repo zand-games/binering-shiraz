@@ -8,6 +8,9 @@ export class Trash extends LitElement {
   @state()
   value!: boolean;
 
+  @state()
+  playerId: string = 'A';
+
   render() {
     var _divValue = '';
     if (this.value == null || this.value == undefined) {
@@ -31,13 +34,21 @@ export class Trash extends LitElement {
     `;
   }
   dragovered(e: any) {
-    const inputCard = e.dataTransfer.types.includes('zero') ? false : true;
-    if (
-      this.value === null ||
-      this.value === undefined ||
-      this.value == inputCard
-    ) {
-      e.preventDefault();
+    //debugger;
+    var zeroCard = e.dataTransfer.types.includes('zero||' + this.playerId);
+    var oneCard = e.dataTransfer.types.includes('one||' + this.playerId);
+    var _playerId = e.dataTransfer.types.toString().split('||')[1];
+
+    if (this.value == undefined) {
+      //  game  start
+      /// raise an event that game started....
+      if (this.playerId == _playerId) {
+        e.preventDefault();
+      }
+    } else {
+      if (zeroCard == true && this.value == false) e.preventDefault();
+
+      if (oneCard == true && this.value == true) e.preventDefault();
     }
   }
   dragEntered(e: any) {
@@ -51,22 +62,13 @@ export class Trash extends LitElement {
     this.style.opacity = '1';
   }
   droped(e: any) {
-    // if (e.preventDefault) {
-    //   e.preventDefault();
-    // }
-    // debugger;
-    var zero = e.dataTransfer.getData('zero');
-    var one = e.dataTransfer.getData('one');
+    debugger;
+    var zero = e.dataTransfer.getData('zero||' + this.playerId);
+    var one = e.dataTransfer.getData('one||' + this.playerId);
 
-    // if (zero !== '') {
-    //   this.value = false;
-    // } else {
-    //   this.value = true;
-    // }
     this.value = zero !== '' ? false : true;
     this.style.opacity = '1';
-    debugger;
-    // var rr = e.relatedTarget.getRootNode().host;
+
     document.dispatchEvent(
       new CustomEvent('Card_Remove_Event', { detail: zero !== '' ? zero : one })
     );

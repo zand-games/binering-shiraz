@@ -1,22 +1,41 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import './deck';
 import './trash';
 const cards = [1, 1, 1, 1, 0, 0, 0, 0];
 import gcss from '../globalcss';
 @customElement('section-com')
 export class Section extends LitElement {
+  @state()
+  playerId: string = 'A';
+
   render() {
     return html`
       <div class="section">
         <div class="trash">
-          <trash-comp></trash-comp>
+          <trash-comp .playerId=${this.playerId}></trash-comp>
         </div>
         <div class="decks">
-          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
-          <deck-com .cards=${this.shuffle([...cards])}></deck-com>
+          <deck-com
+            .deckId=${1}
+            .cards=${this.shuffle([...cards])}
+            .playerId=${this.playerId}
+          ></deck-com>
+          <deck-com
+            .deckId=${2}
+            .cards=${this.shuffle([...cards])}
+            .playerId=${this.playerId}
+          ></deck-com>
+          <deck-com
+            .deckId=${3}
+            .cards=${this.shuffle([...cards])}
+            .playerId=${this.playerId}
+          ></deck-com>
+          <deck-com
+            .deckId=${4}
+            .cards=${this.shuffle([...cards])}
+            .playerId=${this.playerId}
+          ></deck-com>
         </div>
       </div>
     `;

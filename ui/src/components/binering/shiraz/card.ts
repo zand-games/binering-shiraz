@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
-import { v4 as uuidv4 } from 'uuid';
 
 import cssg from '../globalcss';
 
@@ -8,6 +7,12 @@ import cssg from '../globalcss';
 export class Card extends LitElement {
   @state()
   value: boolean = false;
+
+  @state()
+  playerId: string = 'A';
+
+  @state()
+  deckId: number = 1;
 
   @state()
   draggable: boolean = false;
@@ -22,7 +27,6 @@ export class Card extends LitElement {
   }
   constructor() {
     super();
-    this.id = uuidv4();
   }
 
   render() {
@@ -36,9 +40,15 @@ export class Card extends LitElement {
     </div> `;
   }
   dragstarted(e: any) {
+    //debugger;
     this.style.opacity = '0.2';
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData(this.value ? 'one' : 'zero', this.id);
+    var one_value = 'one||' + this.playerId;
+    var zero_value = 'zero||' + this.playerId;
+    e.dataTransfer.setData(
+      this.value ? one_value : zero_value,
+      this.playerId + '||' + this.deckId
+    );
   }
   dragended() {
     this.style.opacity = '1';
@@ -54,17 +64,6 @@ export class Card extends LitElement {
       '--border-color',
       this.value == true ? `#075ac1` : '#b31414d6'
     );
-    document.addEventListener('Card_Remove_Event', e => this.cardRemoved(e));
-  }
-  cardRemoved(e: any) {
-    if (e.detail == this.id) {
-      //alert(e.detail);
-      this.remove();
-    }
-  }
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener('Card_Remove_Event', this.cardRemoved);
   }
 
   static get styles() {

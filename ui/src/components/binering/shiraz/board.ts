@@ -8,8 +8,8 @@ export class Board extends LitElement {
   render() {
     return html`
       <div class="container">
-        <section-com></section-com>
-        <section-com></section-com>
+        <section-com .playerId=${'a'}></section-com>
+        <section-com .playerId=${'b'}></section-com>
       </div>
     `;
   }
