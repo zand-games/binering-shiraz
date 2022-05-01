@@ -2,7 +2,8 @@ import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import './card';
 import cssg from '../globalcss';
-
+import '../events';
+import { Events } from '../events';
 @customElement('deck-com')
 export class Deck extends LitElement {
   @state()
@@ -30,11 +31,11 @@ export class Deck extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('Card_Remove_Event', e => this.cardRemoved(e));
+    document.addEventListener(Events.Card_Removed, e => this.cardRemoved(e));
   }
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('Card_Remove_Event', this.cardRemoved);
+    document.removeEventListener(Events.Card_Removed, this.cardRemoved);
   }
   cardRemoved(e: any) {
     const dataArray = e.detail.split('||');
@@ -49,10 +50,15 @@ export class Deck extends LitElement {
       return;
 
     if (playerId == this.playerId && this.deckId == deckId) {
-      //alert('palerid:' + playerId + ' \n deckId:' + deckId);
-      this.cards = this.cards.splice(0, this.cards.length - 1);
+      // remove the save cards at the ends of array.
+      var cardVal = this.cards.pop();
+      while (this.cards[this.cards.length - 1] == cardVal) {
+        this.cards.pop();
+      }
+      this.requestUpdate();
     }
   }
+
   /// pop  :take the last item from array, we need it for Trash dragDrop.
   // push  : add item to last postion. so we need it to internal movement.
   //unshift : add item to first position. when oponent inject card to the deck

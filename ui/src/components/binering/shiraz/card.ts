@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
+import { Events } from '../events';
 
 import cssg from '../globalcss';
 
@@ -34,10 +35,20 @@ export class Card extends LitElement {
       draggable=${this.draggable ? true : false}
       @dragstart=${this.dragstarted}
       @dragend=${this.dragended}
+      @dblclick=${this.doubleClick}
       class="card"
     >
       ${this.value ? 1 : 0}
     </div> `;
+  }
+  doubleClick(e: any) {
+    console.log('for later');
+    // alert('clicked');
+    // document.dispatchEvent(
+    //   new CustomEvent(Events.Card_Removed, {
+    //     detail: this.playerId + '||' + this.deckId,
+    //   })
+    // );
   }
   dragstarted(e: any) {
     //debugger;

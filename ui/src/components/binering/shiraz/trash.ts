@@ -3,7 +3,7 @@ import { state, customElement } from 'lit/decorators.js';
 import _ from 'lodash';
 
 import cssg from '../globalcss';
-
+import { Events } from '../events';
 @customElement('trash-comp')
 export class Trash extends LitElement {
   @state()
@@ -54,7 +54,7 @@ export class Trash extends LitElement {
     this.style.opacity = '0.4';
   }
   dragEnded(e: any) {
-    debugger;
+    //debugger;
     this.style.opacity = '1';
   }
   dragleaved(e: any) {
@@ -66,36 +66,36 @@ export class Trash extends LitElement {
 
     var receivedValue = zero !== '' ? false : true;
 
-    if (this.value == null || this.value == undefined) debugger;
-    document.dispatchEvent(
-      new CustomEvent('First_Player_Selected', {
-        detail: this.playerId + '||' + receivedValue,
-      })
-    );
+    if (this.value == null || this.value == undefined)
+      document.dispatchEvent(
+        new CustomEvent(Events.First_Started_Round, {
+          detail: this.playerId + '||' + receivedValue,
+        })
+      );
 
     this.value = receivedValue;
     this.style.opacity = '1';
 
     document.dispatchEvent(
-      new CustomEvent('Card_Remove_Event', { detail: zero !== '' ? zero : one })
+      new CustomEvent(Events.Card_Removed, { detail: zero !== '' ? zero : one })
     );
   }
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('First_Player_Selected', e =>
+    document.addEventListener(Events.First_Started_Round, e =>
       this.firstPlayerSelected(e)
     );
   }
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(
-      'First_Player_Selected',
+      Events.First_Started_Round,
       this.firstPlayerSelected
     );
   }
 
   firstPlayerSelected(e: any) {
-    debugger;
+    //debugger;
     const dataArray = e.detail.split('||');
     const _playerId = dataArray[0];
     const value = dataArray[1];
@@ -113,7 +113,7 @@ export class Trash extends LitElement {
   }
 
   classSelector() {
-    debugger;
+    //debugger;
     if (this.value == null || this.value == undefined) {
       return 'notdefnied';
     } else if (this.value == true) {
