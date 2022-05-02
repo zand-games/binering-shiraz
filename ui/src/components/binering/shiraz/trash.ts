@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
-import _ from 'lodash';
 
 import cssg from '../globalcss';
 import { Events } from '../events';
