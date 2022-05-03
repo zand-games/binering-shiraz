@@ -8,6 +8,7 @@ import { Trash, Color } from '../../../types/binering/Trash';
 import { Player } from '../../../types/binering/Player';
 import { tsGenerator } from '@type-craft/content';
 import { Game } from '../../../types/binering/Game';
+import { StoreSubscriber } from 'lit-svelte-stores';
 @customElement('trash-component')
 export class TrashComponent extends LitElement {
   // @state()
@@ -16,29 +17,25 @@ export class TrashComponent extends LitElement {
   @state()
   playerId!: number;
 
-  @state()
-  player!: Player;
-
+  game = new StoreSubscriber(this, () => GameStore);
+  private get trash() {
+    return this.game.value.players[this.playerId!].trash;
+  }
   connectedCallback() {
     super.connectedCallback();
-    GameStore.subscribe(
-      value => (this.player! = value.players[this.playerId!])
-    );
   }
 
   render() {
     var _divValue = '';
-    //debugger;
-    if (this.player.trash!.selectedCard == Color.NotSelected) {
+    if (this.trash!.selectedCard == Color.NotSelected) {
       _divValue = '?';
-    } else if (this.player.trash!.selectedCard == Color.True) {
+    } else if (this.trash!.selectedCard == Color.True) {
       _divValue = '1';
     } else {
       _divValue = '0';
     }
+    var turn = html`<div class="turn ">Your Turn!</div>`;
     return html`
-      <h5>Player Counter: ${this.player?.counter}</h5>
-
       <div
         @dragenter=${this.dragEntered}
         @dragend=${this.dragEnded}
@@ -48,11 +45,12 @@ export class TrashComponent extends LitElement {
         class="trashbox shadow ${this.classSelector()}"
       >
         ${_divValue}
+        ${this.game.value.players[this.playerId].turn == true ? turn : ''}
       </div>
     `;
   }
   dragovered(e: any) {
-    if (this.player.trash!.isValidCard(e.dataTransfer.types.toString())) {
+    if (this.trash!.isValidCard(e.dataTransfer.types.toString())) {
       e.preventDefault();
     }
   }
@@ -66,10 +64,10 @@ export class TrashComponent extends LitElement {
     this.style.opacity = '1';
   }
   droped(e: any) {
-    this.player.remove_card(e.dataTransfer.types);
+    this.game.value.players[this.playerId].remove_card(e.dataTransfer.types);
     this.style.opacity = '1';
     GameStore.update(val => {
-      val.players[this.playerId].decks = this.player.decks;
+      val = this.game.value;
       return val;
     });
   }
@@ -82,28 +80,12 @@ export class TrashComponent extends LitElement {
     );
   }
 
-  firstPlayerSelected(e: any) {
-    //debugger;
-    // const dataArray = e.detail.split('||');
-    // const _playerId = dataArray[0];
-    // const value = dataArray[1];
-    // if (
-    //   value == null ||
-    //   value == undefined ||
-    //   _playerId == null ||
-    //   _playerId == undefined
-    // )
-    //   return;
-    // if (_playerId != this.playerId) {
-    //   this.value = value == 'true' ? false : true;
-    // }
-  }
+  firstPlayerSelected(e: any) {}
 
   classSelector() {
-    // debugger;
-    if (this.player.trash!.selectedCard == Color.NotSelected) {
+    if (this.trash!.selectedCard == Color.NotSelected) {
       return 'notdefnied';
-    } else if (this.player.trash!.selectedCard == Color.True) {
+    } else if (this.trash!.selectedCard == Color.True) {
       return 'one';
     } else {
       return 'zero';
@@ -141,6 +123,10 @@ export class TrashComponent extends LitElement {
           -moz-box-shadow: 3px 3px 5px 6px #ccc;
           -webkit-box-shadow: 3px 3px 5px 6px #ccc;
           box-shadow: 3px 3px 5px 6px #ccc;
+        }
+        .turn {
+          font-size: 0.4em;
+          background-color: #23303e;
         }
       `,
     ];

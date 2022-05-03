@@ -16,22 +16,12 @@ export class DeckComponent extends LitElement {
   @state()
   deckId!: string;
 
-  // @state()
-  // deck?: Deck;
-
   game = new StoreSubscriber(this, () => GameStore);
-  deck() {
+  get deck() {
     return this.game.value.players[this.playerId!].getDeck(this.deckId!);
   }
   connectedCallback() {
     super.connectedCallback();
-    // GameStore.subscribe(
-    //   value => (this.deck = value.players[this.playerId!].getDeck(this.deckId))
-    // );
-    document.addEventListener(Events.Card_Removed, e => this.cardRemoved(e));
-    document.addEventListener(Events.Card_Moved_To_Another_Deck, e =>
-      this.cardedMoved(e)
-    );
   }
 
   render() {
@@ -43,42 +33,46 @@ export class DeckComponent extends LitElement {
       @dragend=${this.dragended}
       @dragleave=${this.dragleaved}
     >
-      ${this.deck()!.cards.length > 0
-        ? this.deck()!.cards.map(
+      ${this.deck!.cards.length > 0
+        ? this.deck!.cards.map(
             (card, i, arr) =>
               html`<card-component
                 .playerId=${this.playerId}
                 .value=${card}
                 .deckId=${this.deckId}
-                .draggable=${arr.length - 1 === i ? true : false}
+                .draggable=${this.isdraggable(i, arr)}
               >
               </card-component>`
           )
         : html`<div class="empty">${this.deckId.toUpperCase()}</div>`}
     </div>`;
   }
+
+  isdraggable(index: number, arr: boolean[]) {
+    const iscardIsLastIndex = arr.length - 1 === index ? true : false;
+
+    if (iscardIsLastIndex == false) return false;
+    // Game is not strated
+    if (
+      this.game.value.players[this.playerId!].turn == null ||
+      this.game.value.players[this.playerId!].turn == undefined
+    )
+      return true;
+
+    if (this.game.value.players[this.playerId!].turn == true) return true;
+    return false;
+  }
+
   dragended() {
     this.style.opacity = '1';
   }
   dragleaved() {
     this.style.opacity = '1';
   }
-  dragEntered(e: any) {
-    // var _playerId = e.dataTransfer.types.toString().split('||')[1];
-    // if (this.playerId == _playerId && this.cards.length < 8) {
-    //   // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
-    //   //  e.preventDefault();
-    //   this.style.opacity = '0.4';
-    // }
-  }
+  dragEntered(e: any) {}
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener(Events.Card_Removed, this.cardRemoved);
-    document.removeEventListener(
-      Events.Card_Moved_To_Another_Deck,
-      this.cardedMoved
-    );
   }
   droped(e: any) {
     // var zero = e.dataTransfer.getData('zero||' + this.playerId);

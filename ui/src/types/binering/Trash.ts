@@ -44,6 +44,10 @@ export class Trash {
     return false;
   }
 
+  public setColor(value: boolean) {
+    this.selectedCard = value ? Color.True : Color.Zero;
+  }
+
   public ValidateCard(input: string): CardInfo {
     const data: string[] = input.toString().split('||');
     var result: CardInfo = {

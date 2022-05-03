@@ -1,7 +1,14 @@
 import { Deck } from './Deck';
-import { Trash } from './Trash';
+import { Game } from './Game';
+import { Color, Trash } from './Trash';
 
+export interface MoveEventInfo {
+  playedCard: boolean;
+  player: Player;
+}
 export class Player {
+  public onMove?: (data: MoveEventInfo) => void;
+
   readonly id: number;
   decks: Array<Deck>;
   turn?: boolean;
@@ -51,5 +58,9 @@ export class Player {
 
     var dec = this.decks.find(i => i.id == result?.deckId);
     dec?.removeSimilarCardsFromLastPosition();
+
+    if (this.onMove) {
+      this.onMove({ player: this, playedCard: result?.value! });
+    }
   }
 }
