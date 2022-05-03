@@ -43,7 +43,11 @@ export class TrashComponent extends LitElement {
     `;
   }
   dragovered(e: any) {
-    if (this.trash!.isValidCard(e.dataTransfer.types.toString())) {
+    if (
+      this.game.value.players[this.playerId!].can_card_removable(
+        e.dataTransfer.types.toString()
+      )
+    ) {
       e.preventDefault();
     }
   }

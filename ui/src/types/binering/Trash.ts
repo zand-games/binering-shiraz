@@ -20,26 +20,6 @@ export class Trash {
   public get value() {
     return this.selectedCard == Color.True ? true : false;
   }
-  public isValidCard(input: string): boolean {
-    const result = parseCardInfo(input);
-
-    if (result.dataIsValid == false) return false;
-
-    // input card should be from the same player
-    if (this.playerId != result.playerId) return false;
-
-    if (this.selectedCard == Color.NotSelected) {
-      // this color type is not selected so far
-      return true;
-    } else if (
-      // the input card should be the same as before
-      (this.selectedCard == Color.True && result.value == true) ||
-      (this.selectedCard == Color.Zero && result.value == false)
-    ) {
-      return true;
-    }
-    return false;
-  }
 
   public setColor(value: boolean) {
     this.selectedCard = value ? Color.True : Color.Zero;

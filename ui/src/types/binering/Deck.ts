@@ -14,7 +14,11 @@ export class Deck {
   /// pop  :take the last item from array, we need it for Trash dragDrop.
   // push  : add item to last postion. so we need it to internal movement.
   //unshift : add item to first position. when oponent inject card to the deck
-
+  public howManyRemained(val: boolean) {
+    var item = 0;
+    this.cards.map(i => (i == val ? item++ : ''));
+    return item;
+  }
   public removeSimilarCardsFromLastPosition() {
     var cardVal = this.cards.pop();
     while (this.cards[this.cards.length - 1] == cardVal) {

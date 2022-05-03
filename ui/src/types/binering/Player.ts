@@ -20,7 +20,8 @@ export class Player {
   }
   trash?: Trash;
 
-  private _deckTemplate = [true, true, true, true, false, false, false, false];
+  private _deckTemplate = [true, false, true, false];
+  //private _deckTemplate = [true, true, true, true, false, false, false, false];
   public counter: number = 0;
 
   constructor(id: number) {
@@ -37,7 +38,10 @@ export class Player {
   }
 
   public can_Card_Transfer_To_Oponent(): boolean {
+    //debugger;
     if (this.trash!.selectedCard == Color.NotSelected) return false;
+    // Deck Can not Be empty
+    if (this.isThereEmptyDeck() && this.remainedCard() > 3) return false;
     return this.decks.every(
       dec => dec.cards[dec.cards.length - 1] != this.trash?.value
     );
@@ -62,6 +66,17 @@ export class Player {
     return array;
   }
 
+  private remainedCard() {
+    var count = 0;
+    this.decks.forEach(
+      dec => (count += dec.howManyRemained(this.trash?.value!))
+    );
+    return count;
+  }
+
+  private isThereEmptyDeck(): boolean {
+    return this.decks.some(dec => dec.cards.length == 0);
+  }
   public remove_card(data: string) {
     var result = parseCardInfo(data);
     if (result?.dataIsValid == false) return;
@@ -72,5 +87,29 @@ export class Player {
     if (this.onRemoveCard) {
       this.onRemoveCard({ player: this, playedCard: result?.value! });
     }
+  }
+
+  public can_card_removable(input: string): boolean {
+    const result = parseCardInfo(input);
+
+    if (result.dataIsValid == false) return false;
+
+    // candidate card should be from the same player
+    if (this.id != result.playerId) return false;
+
+    // Deck Can not Be empty
+    if (this.isThereEmptyDeck() && this.remainedCard() > 3) return false;
+
+    if (this.trash!.selectedCard == Color.NotSelected) {
+      // this color type is not selected so far
+      return true;
+    } else if (
+      // the input card should be the same as before
+      (this.trash!.selectedCard == Color.True && result.value == true) ||
+      (this.trash!.selectedCard == Color.Zero && result.value == false)
+    ) {
+      return true;
+    }
+    return false;
   }
 }
