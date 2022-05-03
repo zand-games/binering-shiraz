@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import './card';
+import './card-component';
 import cssg from '../globalcss';
 import '../events';
 import { Events } from '../events';
@@ -85,9 +85,30 @@ export class DeckComponent extends LitElement {
     //   })
     // );
     // this.requestUpdate();
-    // this.style.opacity = '1';
+    this.game.value.transfer_card(
+      e.dataTransfer.types,
+      this.playerId!,
+      this.deckId
+    );
+    GameStore.update(val => {
+      val = this.game.value;
+      return val;
+    });
+    this.style.opacity = '1';
   }
   dragovered(e: any) {
+    this.style.opacity = '.5';
+    if (
+      this.deck?.acceptNewCard(
+        e.dataTransfer.types,
+        this.game.value
+          .getOponent(this.playerId!)
+          .can_Card_Transfer_To_Oponent()
+      )
+    ) {
+      e.preventDefault();
+      //console.log('accepted');
+    }
     // do I recieved this drag
     // debugger;
     // var _playerId = e.dataTransfer.types.toString().split('||')[1];

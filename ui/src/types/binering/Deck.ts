@@ -1,3 +1,6 @@
+import { parseCardInfo } from '../utils';
+import { Player } from './Player';
+import { Color } from './Trash';
 export class Deck {
   readonly playerId: number;
   readonly id: string;
@@ -13,16 +16,28 @@ export class Deck {
   //unshift : add item to first position. when oponent inject card to the deck
 
   public removeSimilarCardsFromLastPosition() {
-    //debugger;
-    //alert('delete forom' + this.playerId + '  ' + this.id);
     var cardVal = this.cards.pop();
-
     while (this.cards[this.cards.length - 1] == cardVal) {
       this.cards.pop();
     }
   }
 
-  public removeLastCard() {}
+  public acceptNewCard(input: string, canOponentSendCard: boolean): boolean {
+    const cardInfo = parseCardInfo(input);
+    // I am full
+    if (this.cards.length == 8) return false;
 
-  public addNewItemToFirstPosition() {}
+    // I do not accept card from myself
+    if (cardInfo.playerId == this.playerId && cardInfo.deckId == this.id)
+      return false;
+
+    // I can accept card from my side and other decks
+    if (cardInfo.playerId == this.playerId && cardInfo.deckId != this.id)
+      return true;
+
+    // I accept card from oponent
+    if (canOponentSendCard) return true;
+
+    return false;
+  }
 }

@@ -1,6 +1,6 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import './section';
+import './section-component';
 import { GameStore } from '../store';
 import gcss from '../globalcss';
 import { Game } from '../../../types/binering/Game';

@@ -1,7 +1,7 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import './deck';
-import './trash';
+import './deck-component';
+import './trash-component';
 const cards = [1, 1, 1, 1, 0, 0, 0, 0];
 import gcss from '../globalcss';
 import { Player } from '../../../types/binering/Player';

@@ -8,7 +8,7 @@ import '@material/mwc-circular-progress';
 
 import './components/binering/shiraz/create-game';
 import './components/binering/shiraz/game-detail';
-import './components/binering/shiraz/board';
+import './components/binering/shiraz/board-component';
 import { appWebsocketContext, appInfoContext } from './contexts';
 
 @customElement('holochain-app')

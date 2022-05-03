@@ -44,8 +44,8 @@ export class TrashComponent extends LitElement {
         @dragover=${this.dragovered}
         class="trashbox shadow ${this.classSelector()}"
       >
-        ${_divValue}
         ${this.game.value.players[this.playerId].turn == true ? turn : ''}
+        ${_divValue}
       </div>
     `;
   }
@@ -127,6 +127,7 @@ export class TrashComponent extends LitElement {
         .turn {
           font-size: 0.4em;
           background-color: #23303e;
+          opacity: 0.8;
         }
       `,
     ];

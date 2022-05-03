@@ -3,18 +3,13 @@
 // example:
 // 1||one||A
 // 2||zero||C
-export interface CardInfo {
-  playerId?: number;
-  deckId?: string;
-  value?: boolean;
-  dataIsValid: boolean;
-}
+
 export enum Color {
   Zero = 0,
   True = 1,
   NotSelected = 2,
 }
-
+import { parseCardInfo } from '../utils';
 export class Trash {
   readonly playerId?: number;
   selectedCard: Color = Color.NotSelected;
@@ -22,9 +17,11 @@ export class Trash {
   constructor(playerId: number) {
     this.playerId = playerId;
   }
-
+  public get value() {
+    return this.selectedCard == Color.True ? true : false;
+  }
   public isValidCard(input: string): boolean {
-    const result = this.ValidateCard(input);
+    const result = parseCardInfo(input);
 
     if (result.dataIsValid == false) return false;
 
@@ -46,23 +43,5 @@ export class Trash {
 
   public setColor(value: boolean) {
     this.selectedCard = value ? Color.True : Color.Zero;
-  }
-
-  public ValidateCard(input: string): CardInfo {
-    const data: string[] = input.toString().split('||');
-    var result: CardInfo = {
-      dataIsValid: false,
-    };
-    if (data.length < 3) {
-      const result: CardInfo = {
-        dataIsValid: false,
-      };
-    } else {
-      result.playerId = Number(data[0]);
-      result.value = data[1].toLowerCase() == 'one' ? true : false;
-      result.deckId = data[2];
-      result.dataIsValid = true;
-    }
-    return result;
   }
 }
