@@ -1,4 +1,4 @@
-import { parseCardInfo } from '../utils';
+import { parseCardInfo, messageBox } from '../utils';
 import { Deck } from './Deck';
 import { Color, Trash } from './Trash';
 
@@ -20,8 +20,7 @@ export class Player {
   }
   trash?: Trash;
 
-  private _deckTemplate = [true, false, true, false];
-  //private _deckTemplate = [true, true, true, true, false, false, false, false];
+  private _deckTemplate = [true, true, true, true, false, false, false, false];
   public counter: number = 0;
 
   constructor(id: number) {
@@ -38,10 +37,11 @@ export class Player {
   }
 
   public can_Card_Transfer_To_Oponent(): boolean {
-    //debugger;
     if (this.trash!.selectedCard == Color.NotSelected) return false;
     // Deck Can not Be empty
-    if (this.isThereEmptyDeck() && this.remainedCard() > 3) return false;
+    if (this.isThereEmptyDeck()) {
+      return false;
+    }
     return this.decks.every(
       dec => dec.cards[dec.cards.length - 1] != this.trash?.value
     );
@@ -66,7 +66,7 @@ export class Player {
     return array;
   }
 
-  private remainedCard() {
+  public remainedCard() {
     var count = 0;
     this.decks.forEach(
       dec => (count += dec.howManyRemained(this.trash?.value!))

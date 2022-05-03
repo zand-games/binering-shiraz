@@ -21,3 +21,7 @@ export function parseCardInfo(input: string): CardInfo {
   }
   return result;
 }
+
+export function messageBox(val: string) {
+  document.dispatchEvent(new CustomEvent('msg-event', { detail: val }));
+}

@@ -9,6 +9,7 @@ import '@material/mwc-circular-progress';
 import './components/binering/shiraz/create-game';
 import './components/binering/shiraz/game-detail';
 import './components/binering/shiraz/board-component';
+import './components/message-box';
 import { appWebsocketContext, appInfoContext } from './contexts';
 
 @customElement('holochain-app')
@@ -42,6 +43,7 @@ export class HolochainApp extends LitElement {
         <h1>Binering Games - Shiraz</h1>
 
         <board-component></board-component>
+        <msg-component></msg-component>
         <!-- <create-game
           @game-created=${(e: CustomEvent) =>
           (this.entryHash = e.detail.entryHash)}
@@ -68,6 +70,12 @@ export class HolochainApp extends LitElement {
       background-color: var(--lit-element-background-color);
     }
 
+    h1 {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* IE10+/Edge */
+      user-select: none; /* Standard */
+    }
     main {
       flex-grow: 1;
     }
