@@ -41,7 +41,7 @@ export class HolochainApp extends LitElement {
       <main>
         <h1>Binering Games - Shiraz</h1>
 
-        <board-game></board-game>
+        <board-component></board-component>
         <!-- <create-game
           @game-created=${(e: CustomEvent) =>
           (this.entryHash = e.detail.entryHash)}

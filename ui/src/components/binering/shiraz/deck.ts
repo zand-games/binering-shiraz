@@ -1,19 +1,38 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import './card';
 import cssg from '../globalcss';
 import '../events';
 import { Events } from '../events';
-@customElement('deck-com')
-export class Deck extends LitElement {
+import { Deck } from '../../../types/binering/Deck';
+import { GameStore } from '../store';
+import { StoreSubscriber } from 'lit-svelte-stores';
+
+@customElement('deck-component')
+export class DeckComponent extends LitElement {
   @state()
-  cards!: Array<boolean>;
+  playerId?: number;
 
   @state()
-  playerId: string = 'A';
+  deckId!: string;
 
-  @state()
-  deckId: number = 0;
+  // @state()
+  // deck?: Deck;
+
+  game = new StoreSubscriber(this, () => GameStore);
+  deck() {
+    return this.game.value.players[this.playerId!].getDeck(this.deckId!);
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    // GameStore.subscribe(
+    //   value => (this.deck = value.players[this.playerId!].getDeck(this.deckId))
+    // );
+    document.addEventListener(Events.Card_Removed, e => this.cardRemoved(e));
+    document.addEventListener(Events.Card_Moved_To_Another_Deck, e =>
+      this.cardedMoved(e)
+    );
+  }
 
   render() {
     return html` <div
@@ -24,18 +43,18 @@ export class Deck extends LitElement {
       @dragend=${this.dragended}
       @dragleave=${this.dragleaved}
     >
-      ${this.cards.length > 0
-        ? this.cards.map(
+      ${this.deck()!.cards.length > 0
+        ? this.deck()!.cards.map(
             (card, i, arr) =>
-              html`<card-comp
+              html`<card-component
                 .playerId=${this.playerId}
                 .value=${card}
                 .deckId=${this.deckId}
                 .draggable=${arr.length - 1 === i ? true : false}
               >
-              </card-comp>`
+              </card-component>`
           )
-        : html`<div class="empty">D</div>`}
+        : html`<div class="empty">${this.deckId.toUpperCase()}</div>`}
     </div>`;
   }
   dragended() {
@@ -45,21 +64,14 @@ export class Deck extends LitElement {
     this.style.opacity = '1';
   }
   dragEntered(e: any) {
-    var _playerId = e.dataTransfer.types.toString().split('||')[1];
+    // var _playerId = e.dataTransfer.types.toString().split('||')[1];
+    // if (this.playerId == _playerId && this.cards.length < 8) {
+    //   // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
+    //   //  e.preventDefault();
+    //   this.style.opacity = '0.4';
+    // }
+  }
 
-    if (this.playerId == _playerId && this.cards.length < 8) {
-      // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
-      //  e.preventDefault();
-      this.style.opacity = '0.4';
-    }
-  }
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener(Events.Card_Removed, e => this.cardRemoved(e));
-    document.addEventListener(Events.Card_Moved_To_Another_Deck, e =>
-      this.cardedMoved(e)
-    );
-  }
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(Events.Card_Removed, this.cardRemoved);
@@ -69,30 +81,26 @@ export class Deck extends LitElement {
     );
   }
   droped(e: any) {
-    var zero = e.dataTransfer.getData('zero||' + this.playerId);
-    var one = e.dataTransfer.getData('one||' + this.playerId);
-
-    var receivedValue = zero !== '' ? false : true;
-
-    this.cards.push(receivedValue);
-    document.dispatchEvent(
-      new CustomEvent(Events.Card_Moved_To_Another_Deck, {
-        detail: zero !== '' ? zero : one,
-      })
-    );
-    this.requestUpdate();
-    this.style.opacity = '1';
+    // var zero = e.dataTransfer.getData('zero||' + this.playerId);
+    // var one = e.dataTransfer.getData('one||' + this.playerId);
+    // var receivedValue = zero !== '' ? false : true;
+    // this.cards.push(receivedValue);
+    // document.dispatchEvent(
+    //   new CustomEvent(Events.Card_Moved_To_Another_Deck, {
+    //     detail: zero !== '' ? zero : one,
+    //   })
+    // );
+    // this.requestUpdate();
+    // this.style.opacity = '1';
   }
   dragovered(e: any) {
     // do I recieved this drag
-    debugger;
-
-    var _playerId = e.dataTransfer.types.toString().split('||')[1];
-
-    if (this.playerId == _playerId && this.cards.length < 8) {
-      // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
-      e.preventDefault();
-    }
+    // debugger;
+    // var _playerId = e.dataTransfer.types.toString().split('||')[1];
+    // if (this.playerId == _playerId && this.cards.length < 8) {
+    //   // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
+    //   e.preventDefault();
+    // }
   }
   cardedMoved(e: any) {
     const dataArray = e.detail.split('||');
@@ -106,33 +114,32 @@ export class Deck extends LitElement {
     )
       return;
 
-    if (playerId == this.playerId && this.deckId == deckId) {
-      // remove the save cards at the ends of array.
-      var cardVal = this.cards.pop();
+    // if (playerId == this.playerId && this.deckId == deckId) {
+    //   // remove the save cards at the ends of array.
+    //   var cardVal = this.cards.pop();
 
-      this.requestUpdate();
-    }
+    //   this.requestUpdate();
+    // }
   }
   cardRemoved(e: any) {
-    const dataArray = e.detail.split('||');
-    let playerId = dataArray[0];
-    let deckId = dataArray[1];
-    if (
-      playerId == null ||
-      deckId == null ||
-      playerId == undefined ||
-      deckId == undefined
-    )
-      return;
-
-    if (playerId == this.playerId && this.deckId == deckId) {
-      // remove the save cards at the ends of array.
-      var cardVal = this.cards.pop();
-      while (this.cards[this.cards.length - 1] == cardVal) {
-        this.cards.pop();
-      }
-      this.requestUpdate();
-    }
+    // const dataArray = e.detail.split('||');
+    // let playerId = dataArray[0];
+    // let deckId = dataArray[1];
+    // if (
+    //   playerId == null ||
+    //   deckId == null ||
+    //   playerId == undefined ||
+    //   deckId == undefined
+    // )
+    //   return;
+    // if (playerId == this.playerId && this.deckId == deckId) {
+    //   // remove the save cards at the ends of array.
+    //   var cardVal = this.cards.pop();
+    //   while (this.cards[this.cards.length - 1] == cardVal) {
+    //     this.cards.pop();
+    //   }
+    //   this.requestUpdate();
+    // }
   }
 
   /// pop  :take the last item from array, we need it for Trash dragDrop.

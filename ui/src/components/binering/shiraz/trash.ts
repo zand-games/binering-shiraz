@@ -1,26 +1,44 @@
 import { LitElement, html, css } from 'lit';
-import { state, customElement } from 'lit/decorators.js';
+import { state, customElement, property } from 'lit/decorators.js';
 
 import cssg from '../globalcss';
 import { Events } from '../events';
-@customElement('trash-comp')
-export class Trash extends LitElement {
-  @state()
-  value!: boolean;
+import { GameStore } from '../store';
+import { Trash, Color } from '../../../types/binering/Trash';
+import { Player } from '../../../types/binering/Player';
+import { tsGenerator } from '@type-craft/content';
+import { Game } from '../../../types/binering/Game';
+@customElement('trash-component')
+export class TrashComponent extends LitElement {
+  // @state()
+  // value!: boolean;
 
   @state()
-  playerId: string = 'A';
+  playerId!: number;
+
+  @state()
+  player!: Player;
+
+  connectedCallback() {
+    super.connectedCallback();
+    GameStore.subscribe(
+      value => (this.player! = value.players[this.playerId!])
+    );
+  }
 
   render() {
     var _divValue = '';
-    if (this.value == null || this.value == undefined) {
+    //debugger;
+    if (this.player.trash!.selectedCard == Color.NotSelected) {
       _divValue = '?';
-    } else if (this.value == true) {
+    } else if (this.player.trash!.selectedCard == Color.True) {
       _divValue = '1';
     } else {
       _divValue = '0';
     }
     return html`
+      <h5>Player Counter: ${this.player?.counter}</h5>
+
       <div
         @dragenter=${this.dragEntered}
         @dragend=${this.dragEnded}
@@ -34,57 +52,28 @@ export class Trash extends LitElement {
     `;
   }
   dragovered(e: any) {
-    //debugger;
-    var zeroCard = e.dataTransfer.types.includes('zero||' + this.playerId);
-    var oneCard = e.dataTransfer.types.includes('one||' + this.playerId);
-    var _playerId = e.dataTransfer.types.toString().split('||')[1];
-
-    if (this.value == undefined) {
-      if (this.playerId == _playerId) {
-        e.preventDefault();
-      }
-    } else {
-      if (zeroCard == true && this.value == false) e.preventDefault();
-
-      if (oneCard == true && this.value == true) e.preventDefault();
+    if (this.player.trash!.isValidCard(e.dataTransfer.types.toString())) {
+      e.preventDefault();
     }
   }
   dragEntered(e: any) {
     this.style.opacity = '0.4';
   }
   dragEnded(e: any) {
-    //debugger;
     this.style.opacity = '1';
   }
   dragleaved(e: any) {
     this.style.opacity = '1';
   }
   droped(e: any) {
-    var zero = e.dataTransfer.getData('zero||' + this.playerId);
-    var one = e.dataTransfer.getData('one||' + this.playerId);
-
-    var receivedValue = zero !== '' ? false : true;
-
-    if (this.value == null || this.value == undefined)
-      document.dispatchEvent(
-        new CustomEvent(Events.First_Started_Round, {
-          detail: this.playerId + '||' + receivedValue,
-        })
-      );
-
-    this.value = receivedValue;
+    this.player.remove_card(e.dataTransfer.types);
     this.style.opacity = '1';
+    GameStore.update(val => {
+      val.players[this.playerId].decks = this.player.decks;
+      return val;
+    });
+  }
 
-    document.dispatchEvent(
-      new CustomEvent(Events.Card_Removed, { detail: zero !== '' ? zero : one })
-    );
-  }
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener(Events.First_Started_Round, e =>
-      this.firstPlayerSelected(e)
-    );
-  }
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(
@@ -95,27 +84,26 @@ export class Trash extends LitElement {
 
   firstPlayerSelected(e: any) {
     //debugger;
-    const dataArray = e.detail.split('||');
-    const _playerId = dataArray[0];
-    const value = dataArray[1];
-    if (
-      value == null ||
-      value == undefined ||
-      _playerId == null ||
-      _playerId == undefined
-    )
-      return;
-
-    if (_playerId != this.playerId) {
-      this.value = value == 'true' ? false : true;
-    }
+    // const dataArray = e.detail.split('||');
+    // const _playerId = dataArray[0];
+    // const value = dataArray[1];
+    // if (
+    //   value == null ||
+    //   value == undefined ||
+    //   _playerId == null ||
+    //   _playerId == undefined
+    // )
+    //   return;
+    // if (_playerId != this.playerId) {
+    //   this.value = value == 'true' ? false : true;
+    // }
   }
 
   classSelector() {
-    //debugger;
-    if (this.value == null || this.value == undefined) {
+    // debugger;
+    if (this.player.trash!.selectedCard == Color.NotSelected) {
       return 'notdefnied';
-    } else if (this.value == true) {
+    } else if (this.player.trash!.selectedCard == Color.True) {
       return 'one';
     } else {
       return 'zero';

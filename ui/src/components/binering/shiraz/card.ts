@@ -4,28 +4,20 @@ import { Events } from '../events';
 
 import cssg from '../globalcss';
 
-@customElement('card-comp')
-export class Card extends LitElement {
+@customElement('card-component')
+export class CardComponent extends LitElement {
   @state()
   value: boolean = false;
 
   @state()
-  playerId: string = 'A';
+  playerId?: number;
 
   @state()
-  deckId: number = 1;
+  deckId?: string;
 
   @state()
   draggable: boolean = false;
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
-  static get properties() {
-    return {
-      id: { type: Object },
-    };
-  }
   constructor() {
     super();
   }
@@ -37,11 +29,17 @@ export class Card extends LitElement {
       @dragend=${this.dragended}
       @dblclick=${this.doubleClick}
       class="card"
+      card-data=${this.playerId! +
+      '||' +
+      this.getCharValue() +
+      '||' +
+      this.deckId?.toLocaleLowerCase()}
     >
       ${this.value ? 1 : 0}
     </div> `;
   }
   doubleClick(e: any) {
+    debugger;
     console.log('for later');
     // alert('clicked');
     // document.dispatchEvent(
@@ -54,12 +52,14 @@ export class Card extends LitElement {
     //debugger;
     this.style.opacity = '0.2';
     e.dataTransfer.effectAllowed = 'move';
-    var one_value = 'one||' + this.playerId;
-    var zero_value = 'zero||' + this.playerId;
-    e.dataTransfer.setData(
-      this.value ? one_value : zero_value,
-      this.playerId + '||' + this.deckId
-    );
+    var data = e.target.getAttribute('card-data');
+    e.dataTransfer.setData(data, data);
+    // var one_value = 'one||' + this.playerId;
+    // var zero_value = 'zero||' + this.playerId;
+    // e.dataTransfer.setData(
+    //   this.value ? one_value : zero_value,
+    //   this.playerId + '||' + this.deckId
+    // );
   }
   dragended() {
     this.style.opacity = '1';
@@ -75,6 +75,11 @@ export class Card extends LitElement {
       '--border-color',
       this.value == true ? `#075ac1` : '#b31414d6'
     );
+  }
+
+  private getCharValue() {
+    if (this.value) return 'one';
+    else return 'zero';
   }
 
   static get styles() {
