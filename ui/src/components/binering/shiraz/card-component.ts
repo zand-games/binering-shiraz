@@ -1,9 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
-import { Events } from '../events';
-
 import cssg from '../globalcss';
-
 @customElement('card-component')
 export class CardComponent extends LitElement {
   @state()
@@ -55,15 +52,6 @@ export class CardComponent extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-
-    // this.style.setProperty(
-    //   '--background-color',
-    //   this.value == true ? `blue` : 'red'
-    // );
-    // this.style.setProperty(
-    //   '--border-color',
-    //   this.value == true ? `#075ac1` : '#b31414d6'
-    // );
   }
 
   private getCharValue() {
@@ -85,12 +73,10 @@ export class CardComponent extends LitElement {
           flex: 100px 1 0;
           border-radius: 5px;
           margin-bottom: -20px;
-          /* background-color: var(--background-color); */
           box-shadow: 3px 3px 3px gray;
           color: white;
           font-size: 2em;
           border: 3px solid;
-          /* border-color: var(--border-color); */
           -webkit-user-select: none; /* Safari */
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */

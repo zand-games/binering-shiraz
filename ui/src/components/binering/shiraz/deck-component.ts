@@ -3,8 +3,6 @@ import { customElement, property, state } from 'lit/decorators.js';
 import './card-component';
 import cssg from '../globalcss';
 import '../events';
-import { Events } from '../events';
-import { Deck } from '../../../types/binering/Deck';
 import { GameStore } from '../store';
 import { StoreSubscriber } from 'lit-svelte-stores';
 
@@ -75,16 +73,6 @@ export class DeckComponent extends LitElement {
     super.disconnectedCallback();
   }
   droped(e: any) {
-    // var zero = e.dataTransfer.getData('zero||' + this.playerId);
-    // var one = e.dataTransfer.getData('one||' + this.playerId);
-    // var receivedValue = zero !== '' ? false : true;
-    // this.cards.push(receivedValue);
-    // document.dispatchEvent(
-    //   new CustomEvent(Events.Card_Moved_To_Another_Deck, {
-    //     detail: zero !== '' ? zero : one,
-    //   })
-    // );
-    // this.requestUpdate();
     this.game.value.transfer_card(
       e.dataTransfer.types,
       this.playerId!,
@@ -107,59 +95,8 @@ export class DeckComponent extends LitElement {
       )
     ) {
       e.preventDefault();
-      //console.log('accepted');
     }
-    // do I recieved this drag
-    // debugger;
-    // var _playerId = e.dataTransfer.types.toString().split('||')[1];
-    // if (this.playerId == _playerId && this.cards.length < 8) {
-    //   // if the card is from myself and the Deck has enough spsace, let's add it. It is internal play
-    //   e.preventDefault();
-    // }
   }
-  cardedMoved(e: any) {
-    const dataArray = e.detail.split('||');
-    let playerId = dataArray[0];
-    let deckId = dataArray[1];
-    if (
-      playerId == null ||
-      deckId == null ||
-      playerId == undefined ||
-      deckId == undefined
-    )
-      return;
-
-    // if (playerId == this.playerId && this.deckId == deckId) {
-    //   // remove the save cards at the ends of array.
-    //   var cardVal = this.cards.pop();
-
-    //   this.requestUpdate();
-    // }
-  }
-  cardRemoved(e: any) {
-    // const dataArray = e.detail.split('||');
-    // let playerId = dataArray[0];
-    // let deckId = dataArray[1];
-    // if (
-    //   playerId == null ||
-    //   deckId == null ||
-    //   playerId == undefined ||
-    //   deckId == undefined
-    // )
-    //   return;
-    // if (playerId == this.playerId && this.deckId == deckId) {
-    //   // remove the save cards at the ends of array.
-    //   var cardVal = this.cards.pop();
-    //   while (this.cards[this.cards.length - 1] == cardVal) {
-    //     this.cards.pop();
-    //   }
-    //   this.requestUpdate();
-    // }
-  }
-
-  /// pop  :take the last item from array, we need it for Trash dragDrop.
-  // push  : add item to last postion. so we need it to internal movement.
-  //unshift : add item to first position. when oponent inject card to the deck
   static get styles() {
     return [
       cssg,

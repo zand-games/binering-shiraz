@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { state, customElement, property } from 'lit/decorators.js';
 
 import cssg from '../globalcss';
-import { Events } from '../events';
 import { GameStore } from '../store';
 import { Trash, Color } from '../../../types/binering/Trash';
 import { Player } from '../../../types/binering/Player';
@@ -11,18 +10,12 @@ import { Game } from '../../../types/binering/Game';
 import { StoreSubscriber } from 'lit-svelte-stores';
 @customElement('trash-component')
 export class TrashComponent extends LitElement {
-  // @state()
-  // value!: boolean;
-
   @state()
   playerId!: number;
 
   game = new StoreSubscriber(this, () => GameStore);
   private get trash() {
     return this.game.value.players[this.playerId!].trash;
-  }
-  connectedCallback() {
-    super.connectedCallback();
   }
 
   render() {
@@ -71,16 +64,6 @@ export class TrashComponent extends LitElement {
       return val;
     });
   }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener(
-      Events.First_Started_Round,
-      this.firstPlayerSelected
-    );
-  }
-
-  firstPlayerSelected(e: any) {}
 
   classSelector() {
     if (this.trash!.selectedCard == Color.NotSelected) {

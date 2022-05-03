@@ -54,6 +54,9 @@ export class Game {
     else throw new Error('PlayerId is invalid!');
   }
 
+  /// pop  :take the last item from array, we need it for Trash dragDrop.
+  // push  : add item to last postion. so we need it to internal movement.
+  //unshift : add item to first position. when oponent inject card to the deck
   public transfer_card(
     input: string,
     target_player: number,

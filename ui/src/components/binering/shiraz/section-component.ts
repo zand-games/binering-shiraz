@@ -52,9 +52,6 @@ export class SectionComponent extends LitElement {
           align-items: center;
           align-content: center;
         }
-        /* div.trash {
-          background-color: gray;
-        } */
       `,
     ];
   }
