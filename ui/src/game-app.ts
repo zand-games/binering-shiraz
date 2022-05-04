@@ -8,19 +8,42 @@ import './components/binering/shiraz/game-detail';
 import './components/binering/shiraz/board-component';
 import './components/message-box';
 import { appWebsocketContext, appInfoContext } from './contexts';
-
+import './components/binering/shiraz/help-component';
 @customElement('game-app')
 export class GameApp extends LitElement {
   render() {
     return html`
       <main>
-        <h1>Binaring Games - Shiraz</h1>
+        <h1>
+          <a class="title" href="https://zand.games">Binaring Games - Shiraz</a>
+          <help-component></help-component>
+        </h1>
         <board-component></board-component>
+        <footer>
+          <h6>Copyright © 2022 Zand.Games. All Rights Reserved.</h6>
+        </footer>
       </main>
     `;
   }
 
   static styles = css`
+    .title {
+      text-decoration: none;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      align-items: center;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+
+      background-color: rgb(154 181 3 / 55%);
+    }
+
     :host {
       min-height: 100vh;
       display: flex;
@@ -40,6 +63,10 @@ export class GameApp extends LitElement {
       -moz-user-select: none; /* Firefox */
       -ms-user-select: none; /* IE10+/Edge */
       user-select: none; /* Standard */
+    }
+    h6 {
+      padding: 10px;
+      margin: 0;
     }
     main {
       flex-grow: 1;
