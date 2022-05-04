@@ -36,6 +36,14 @@ export class Player {
     return this.decks.find(i => i.id == key);
   }
 
+  public calc_score() {
+    var count = 0;
+    this.decks.forEach(
+      dec => (count += 2 * dec.howManyRemained(!this.trash?.value!))
+    );
+    return count;
+  }
+
   public can_Card_Transfer_To_Oponent(): boolean {
     if (this.trash!.selectedCard == Color.NotSelected) return false;
     // Deck Can not Be empty
@@ -78,6 +86,7 @@ export class Player {
     return this.decks.some(dec => dec.cards.length == 0);
   }
   public remove_card(data: string) {
+    if (!this.can_card_removable(data)) return; // double check if the card can be removable
     var result = parseCardInfo(data);
     if (result?.dataIsValid == false) return;
 

@@ -1,6 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { state, customElement } from 'lit/decorators.js';
 import cssg from '../globalcss';
+import { StoreSubscriber } from 'lit-svelte-stores';
+import { GameStore } from '../store';
+
 @customElement('card-component')
 export class CardComponent extends LitElement {
   @state()
@@ -14,6 +17,8 @@ export class CardComponent extends LitElement {
 
   @state()
   draggable: boolean = false;
+
+  game = new StoreSubscriber(this, () => GameStore);
 
   constructor() {
     super();
@@ -39,7 +44,15 @@ export class CardComponent extends LitElement {
     </div> `;
   }
   doubleClick(e: any) {
-    console.log('for later');
+    //console.log('for later');
+    debugger;
+    this.game.value.players[this.playerId!].remove_card(
+      e.target.getAttribute('card-data')
+    );
+    GameStore.update(val => {
+      val = this.game.value;
+      return val;
+    });
   }
   dragstarted(e: any) {
     this.style.opacity = '0.2';

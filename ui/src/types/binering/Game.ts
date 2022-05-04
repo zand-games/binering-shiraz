@@ -4,11 +4,19 @@ import { parseCardInfo } from '../utils';
 import { HtmlTagHydration } from 'svelte/internal';
 
 export class Game {
-  public players: Record<number, Player>;
+  public players: Record<number, Player> = {};
   private player1!: Player;
   private player2!: Player;
+  public Winner?: string;
   constructor() {
+    this.startNewGame();
+  }
+  public ResumeGame(game_hash: String) {
+    // fetch game from DHT
+  }
+  public startNewGame() {
     this.game_finished = false;
+    this.Winner = '';
     this.player1 = new Player(1);
     this.player2 = new Player(2);
     this.player1.onRemoveCard = data => {
@@ -19,16 +27,7 @@ export class Game {
     };
     this.players = { 1: this.player1, 2: this.player2 };
   }
-  public ResumeGame(game_hash: String) {
-    // fetch game from DHT
-  }
   public game_finished!: boolean;
-  public newRound() {
-    this.game_finished = false;
-    this.player1 = new Player(1);
-    this.player2 = new Player(2);
-    this.players = { 1: this.player1, 2: this.player2 };
-  }
   private onRemoveCardEventHandler(data: MoveEventInfo, game: Game) {
     // data.player.turn = false;
     var oponent = game.getOponent(data.player.id);
@@ -44,10 +43,16 @@ export class Game {
 
   private check_winner() {
     if (this.player1.remainedCard() == 0) {
-      alert('Player ' + 1 + 'Won the round!');
+      // alert('Player ' + 1 + 'Won the round!');
+      this.Winner =
+        'Player 1 Won the round!  Score:' + this.player1.calc_score();
+      this.game_finished = true;
     }
     if (this.player2.remainedCard() == 0) {
-      alert('Player ' + 2 + 'Won the round!');
+      this.Winner =
+        'Player 2 Won the round! Score:' + this.player2.calc_score();
+      //alert('Player ' + 2 + 'Won the round!');
+      this.game_finished = true;
     }
   }
 
