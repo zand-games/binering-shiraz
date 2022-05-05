@@ -81,8 +81,8 @@ export class CardComponent extends LitElement {
       cssg,
       css`
         div.card {
-          height: 100px;
-          width: 60px;
+          height: 1.5em;
+          width: 1.1em;
           flex: 100px 1 0;
           border-radius: 5px;
           margin-bottom: -20px;

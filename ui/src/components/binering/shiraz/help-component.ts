@@ -52,22 +52,31 @@ export class HelpComponent extends LitElement {
                     decks.
                     <p>
                       You can Drag&Drop your <span class="red">Red</span> card
-                      to your TrashBox. Double click also works. <br />All red
-                      <span class="red">Red</span> that are next to the last
-                      card will be removed.
+                      to your TrashBox. Double click also works. <br />All
+                      <span class="red">Red</span> cards that are next to the
+                      last card will be removed.
                     </p>
                   </li>
                   <li>
                     You can transfer <span class="blue">Blue</span> card to your
-                    oponent.
+                    opponent.
                     <p>
-                      You can only transfer card to your oponent if all your
+                      You can only transfer card to your opponent if all your
                       decks end up with <span class="blue">Blue</span> cards,
-                      which means you have no avilable
+                      which means you have no available
                       <span class="red">Red</span> card in your decks to be
                       moved to TrashBox. We call this situtaion: "Decks are
                       Locked"
                     </p>
+                  </li>
+                  <li>
+                    Empty deck is not allowed.
+                    <p>
+                      If one of your decks is empty, you can not move or
+                      transfer any card. You have to fill out your empty deck
+                      before any other move.
+                    </p>
+                    <p>The maximum number of cards in each deck is 8</p>
                   </li>
                   <li>
                     You can also move your cards internally
@@ -75,7 +84,7 @@ export class HelpComponent extends LitElement {
                       It means you can transfer a card from one deck to another.
                       You may want to do it because of your strategy. You can
                       lock all your decks by an internal move to be ready to
-                      transfer a card to oponent.
+                      transfer a card to opponent.
                     </p>
                   </li>
 
@@ -84,7 +93,8 @@ export class HelpComponent extends LitElement {
                     <p>
                       If you win while you have 5
                       <span class="blue">Blue</span> cards in your decks, you
-                      have got 10 points. 2 point per card.
+                      got 10 points. 2 point per card. Either your opponent has
+                      got -10.
                     </p>
                   </li>
                 </ol>

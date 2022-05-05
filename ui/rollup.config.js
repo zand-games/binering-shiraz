@@ -24,6 +24,7 @@ export default {
   plugins: [
     /** Enable using HTML as rollup entrypoint */
     replace({
+      preventAssignment: true,
       'process.env.HC_PORT': '8888',
       delimiters: ['', ''],
     }),
