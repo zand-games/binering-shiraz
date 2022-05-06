@@ -3,6 +3,7 @@ import { state, customElement } from 'lit/decorators.js';
 import cssg from '../globalcss';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { GameStore } from '../store';
+import { GenerateCardData } from '../../../types/binering/Card';
 
 @customElement('card-component')
 export class CardComponent extends LitElement {
@@ -34,19 +35,15 @@ export class CardComponent extends LitElement {
       @dragend=${this.dragended}
       @dblclick=${this.doubleClick}
       class="card ${this.draggableClass()}"
-      card-data=${this.playerId! +
-      '||' +
-      this.getCharValue() +
-      '||' +
-      this.deckId?.toLocaleLowerCase()}
+      card-data=${GenerateCardData(this.playerId!, this.deckId!, this.value)}
     >
       ${this.value ? 1 : 0}
     </div> `;
   }
-  doubleClick(e: any) {
+  async doubleClick(e: any) {
     //console.log('for later');
-    debugger;
-    this.game.value.players[this.playerId!].remove_card(
+    //debugger;
+    await this.game.value.players[this.playerId!].remove_card(
       e.target.getAttribute('card-data')
     );
     GameStore.update(val => {
@@ -65,11 +62,6 @@ export class CardComponent extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-  }
-
-  private getCharValue() {
-    if (this.value) return 'one';
-    else return 'zero';
   }
 
   private draggableClass() {

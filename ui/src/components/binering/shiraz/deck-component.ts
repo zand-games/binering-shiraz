@@ -72,8 +72,8 @@ export class DeckComponent extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
   }
-  droped(e: any) {
-    this.game.value.transfer_card(
+  async droped(e: any) {
+    await this.game.value.transfer_card(
       e.dataTransfer.types,
       this.playerId!,
       this.deckId

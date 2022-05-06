@@ -7,9 +7,13 @@ export interface MoveEventInfo {
   player: Player;
 }
 export class Player {
-  public onRemoveCard?: (data: MoveEventInfo) => void;
-
+  public onRemoveCard?: (data: MoveEventInfo) => Promise<void>;
+  public name: string = '';
   readonly id: number;
+  private _isComputer: boolean = false;
+  public get isComputer() {
+    return this._isComputer;
+  }
   decks: Array<Deck>;
   private _turn?: boolean;
   public get turn() {
@@ -22,27 +26,29 @@ export class Player {
 
   private _deckTemplate = [true, true, true, true, false, false, false, false];
   public counter: number = 0;
-
-  constructor(id: number) {
+  constructor(id: number, name: string, isComputer: boolean) {
     this.id = id;
+    this.name = name;
     var deck1 = new Deck(this.id, 'a', this.shuffle([...this._deckTemplate]));
     var deck2 = new Deck(this.id, 'b', this.shuffle([...this._deckTemplate]));
     var deck3 = new Deck(this.id, 'c', this.shuffle([...this._deckTemplate]));
     var deck4 = new Deck(this.id, 'd', this.shuffle([...this._deckTemplate]));
     this.decks = [deck1, deck2, deck3, deck4];
     this.trash = new Trash(this.id);
+    this._isComputer = isComputer;
   }
   public getDeck(key: string) {
     return this.decks.find(i => i.id == key);
   }
 
-  public calc_score() {
-    var count = 0;
-    this.decks.forEach(
-      dec => (count += 2 * dec.howManyRemained(!this.trash?.value!))
-    );
-    return count;
-  }
+  // public calc_score() {
+  //   var count = 0;
+  //   this.decks.forEach(dec=>)
+  //   this.decks.forEach(
+  //     dec => (count += 2 * dec.howManyRemained(!this.trash?.value!))
+  //   );
+  //   return count;
+  // }
 
   public can_Card_Transfer_To_Oponent(): boolean {
     if (this.trash!.selectedCard == Color.NotSelected) return false;
@@ -85,7 +91,7 @@ export class Player {
   private isThereEmptyDeck(): boolean {
     return this.decks.some(dec => dec.cards.length == 0);
   }
-  public remove_card(data: string) {
+  public async remove_card(data: string) {
     if (!this.can_card_removable(data)) return; // double check if the card can be removable
     var result = parseCardInfo(data);
     if (result?.dataIsValid == false) return;
@@ -94,7 +100,7 @@ export class Player {
     dec?.removeSimilarCardsFromLastPosition();
 
     if (this.onRemoveCard) {
-      this.onRemoveCard({ player: this, playedCard: result?.value! });
+      await this.onRemoveCard({ player: this, playedCard: result?.value! });
     }
   }
 

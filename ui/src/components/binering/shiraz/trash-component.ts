@@ -27,7 +27,6 @@ export class TrashComponent extends LitElement {
     } else {
       _divValue = '0';
     }
-    var turn = html`<div class="turn ">Your Turn!</div>`;
     return html`
       <div
         @dragenter=${this.dragEntered}
@@ -37,8 +36,13 @@ export class TrashComponent extends LitElement {
         @dragover=${this.dragovered}
         class="trashbox shadow ${this.classSelector()}"
       >
-        ${this.game.value.players[this.playerId].turn == true ? turn : ''}
-        ${_divValue}
+        ${this.game.value.players[this.playerId].turn == true
+          ? html`<div class="turn ">Your Turn!</div>`
+          : ''}
+
+        <div class="value">${_divValue}</div>
+
+        <div class="name">${this.game.value.players[this.playerId!].name}</div>
       </div>
     `;
   }
@@ -60,8 +64,10 @@ export class TrashComponent extends LitElement {
   dragleaved(e: any) {
     this.style.opacity = '1';
   }
-  droped(e: any) {
-    this.game.value.players[this.playerId].remove_card(e.dataTransfer.types);
+  async droped(e: any) {
+    await this.game.value.players[this.playerId].remove_card(
+      e.dataTransfer.types
+    );
     this.style.opacity = '1';
     GameStore.update(val => {
       val = this.game.value;
@@ -83,8 +89,13 @@ export class TrashComponent extends LitElement {
     return [
       cssg,
       css`
+        .name {
+          margin-top: -0.2em;
+          font-size: 0.4em;
+          color: white;
+        }
         .trashbox {
-          height: 100px;
+          height: 120px;
           width: 200px;
           margin-right: 50px;
           color: white;
@@ -115,6 +126,8 @@ export class TrashComponent extends LitElement {
           font-size: 0.4em;
           background-color: #23303e;
           opacity: 0.8;
+        }
+        .value {
         }
       `,
     ];

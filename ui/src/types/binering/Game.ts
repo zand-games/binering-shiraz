@@ -2,37 +2,54 @@ import { MoveEventInfo, Player } from './Player';
 import { Color } from './Trash';
 import { parseCardInfo } from '../utils';
 import { HtmlTagHydration } from 'svelte/internal';
-
+import { ComputerPlayer } from './ComputerPlay';
+export enum PlayeType {
+  Single = 1,
+  MultiPlayer = 2,
+}
 export class Game {
   public players: Record<number, Player> = {};
   private player1!: Player;
   private player2!: Player;
   public Winner?: string;
+  public playType: PlayeType = PlayeType.Single;
+  //private complay!: ComputerPlayer;
   constructor() {
     this.startNewGame();
+    //this.game_finished = true;
   }
   public ResumeGame(game_hash: String) {
     // fetch game from DHT
   }
-  public startNewGame() {
+  public async startNewGame() {
     this.game_finished = false;
     this.Winner = '';
-    this.player1 = new Player(1);
-    this.player2 = new Player(2);
-    this.player1.onRemoveCard = data => {
-      this.onRemoveCardEventHandler(data, this);
+    this.player1 = new Player(1, 'Player 1', false);
+    this.player2 = new Player(2, 'Computer', true);
+
+    this.player1.onRemoveCard = async data => {
+      await this.onRemoveCardEventHandler(data, this);
     };
-    this.player2.onRemoveCard = data => {
-      this.onRemoveCardEventHandler(data, this);
+    this.player2.onRemoveCard = async data => {
+      await this.onRemoveCardEventHandler(data, this);
     };
     this.players = { 1: this.player1, 2: this.player2 };
+
+    //this.complay = new ComputerPlayer(this.player2, this);
+    // await ComputerPlayer.Move(this.player2, this.player1, this);
   }
   public game_finished!: boolean;
-  private onRemoveCardEventHandler(data: MoveEventInfo, game: Game) {
+  private async onRemoveCardEventHandler(
+    data: MoveEventInfo,
+    game: Game
+  ): Promise<void> {
     // data.player.turn = false;
+    debugger;
     var oponent = game.getOponent(data.player.id);
     // oponent.turn = true;
-    this.changeTurn(data.player.id);
+    //if (data.player.isComputer == false) {
+    await this.changeTurn(data.player.id);
+    // }
     if (data.player.trash?.selectedCard == Color.NotSelected)
       data.player.trash.setColor(data.playedCard);
 
@@ -40,23 +57,38 @@ export class Game {
       oponent.trash.setColor(!data.playedCard);
     }
   }
+  private calc_score(winner: Player, looser: Player) {
+    var count = 0;
+    //winner.decks.forEach(dec => (count += dec.cards.length * 3));
 
+    // in the opponent board
+    looser.decks.forEach(dec =>
+      dec.cards.forEach(card =>
+        card == winner.trash?.value ? (count += 2) : (count += 1)
+      )
+    );
+    return count;
+  }
   private check_winner() {
     if (this.player1.remainedCard() == 0) {
       // alert('Player ' + 1 + 'Won the round!');
       this.Winner =
-        'Player 1 Won the round!  Score:' + this.player1.calc_score();
+        this.player1.name +
+        ' Won the round!  Score:' +
+        this.calc_score(this.player1, this.player2);
       this.game_finished = true;
     }
     if (this.player2.remainedCard() == 0) {
       this.Winner =
-        'Player 2 Won the round! Score:' + this.player2.calc_score();
-      //alert('Player ' + 2 + 'Won the round!');
+        this.player2.name +
+        ' Won the round! Score:' +
+        this.calc_score(this.player2, this.player1);
+      // alert('Player ' + 2 + 'Won the round!');
       this.game_finished = true;
     }
   }
 
-  private changeTurn(playerId?: number) {
+  public async changeTurn(playerId?: number) {
     if (!playerId) {
       // color is already selected
       if (this.players[1].turn) {
@@ -68,9 +100,23 @@ export class Game {
       }
     } else {
       this.players[playerId!].turn = false;
-      this.getOponent(playerId!).turn = true;
+      this.getOponent(playerId).turn = true;
     }
     this.check_winner();
+    // if (this.playType == PlayeType.Single) {
+    //   if (this.game_finished == false) {
+    //     if (this.player2.turn == true) this.complay.Move(this.player1);
+    //   }
+    // }
+    //debugger;
+    if (this.game_finished == false) {
+      // if (this.player1.isComputer && this.player1.turn) {
+      //   await ComputerPlayer.Move(this.player2, this.player1, this);
+      // }
+      if (this.player2.isComputer && this.player2.turn) {
+        ComputerPlayer.Move(this.player1, this.player2, this);
+      }
+    }
   }
   public getOponent(playerId: number) {
     if (playerId == 1) return this.players[2];
@@ -81,7 +127,7 @@ export class Game {
   /// pop  :take the last item from array, we need it for Trash dragDrop.
   // push  : add item to last postion. so we need it to internal movement.
   //unshift : add item to first position. when oponent inject card to the deck
-  public transfer_card(
+  public async transfer_card(
     input: string,
     target_player: number,
     target_deck: string
@@ -105,6 +151,6 @@ export class Game {
         ?.cards.pop();
     }
 
-    this.changeTurn();
+    await this.changeTurn();
   }
 }

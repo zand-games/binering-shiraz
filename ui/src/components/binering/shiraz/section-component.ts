@@ -12,11 +12,13 @@ export class SectionComponent extends LitElement {
 
   @property()
   private player?: Player;
-  connectedCallback() {
-    super.connectedCallback();
+  async connectedCallback() {
+    await super.connectedCallback();
     GameStore.subscribe(value => (this.player = value.players[this.playerId!]));
   }
   render() {
+    if (this.player == undefined || this.player!.decks == undefined)
+      return html``;
     return html`
       <div class="section">
         <div class="trash">

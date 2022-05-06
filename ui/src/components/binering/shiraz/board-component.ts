@@ -10,8 +10,8 @@ import { StoreSubscriber } from 'lit-svelte-stores';
 export class BoardComponent extends LitElement {
   game = new StoreSubscriber(this, () => GameStore);
 
-  playAgain() {
-    this.game.value.startNewGame();
+  async playAgain() {
+    await this.game.value.startNewGame();
     GameStore.update(val => {
       val = this.game.value;
       return val;
