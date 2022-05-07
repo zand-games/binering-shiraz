@@ -56,14 +56,15 @@ export class Game {
   }
   private calc_score(winner: Player, looser: Player) {
     var count = 0;
-    winner.decks.forEach(dec => (count += dec.cards.length * 3));
+    // All card of looser in the game * 3
+    winner.decks.forEach(dec => (count += dec.cards.length * 2));
 
     // in the opponent board
-    looser.decks.forEach(dec =>
-      dec.cards.forEach(card =>
-        card == winner.trash?.value ? (count += 2) : (count += 1)
-      )
-    );
+    // looser.decks.forEach(dec =>
+    //   dec.cards.forEach(card =>
+    //     card == !winner.trash?.value ? (count += 3) : (count += 0)
+    //   )
+    // );
     return count;
   }
   private check_winner() {
