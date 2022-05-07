@@ -6,6 +6,7 @@ import gcss from '../globalcss';
 import { Game } from '../../../types/binering/Game';
 import { derived, Writable } from 'svelte/store';
 import { StoreSubscriber } from 'lit-svelte-stores';
+import './playertype-component';
 @customElement('board-component')
 export class BoardComponent extends LitElement {
   game = new StoreSubscriber(this, () => GameStore);
@@ -28,6 +29,7 @@ export class BoardComponent extends LitElement {
         <h4>${this.game.value.Winner!}</h4>
         <button @click=${this.playAgain}>Play Again!</button>
       </div>
+      <playertype-component></playertype-component>
       <div class="container ${this.gameStatus('game')}">
         <section-component .playerId=${1}></section-component>
         <section-component .playerId=${2}></section-component>

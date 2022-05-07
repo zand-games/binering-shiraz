@@ -4,6 +4,7 @@ import cssg from '../globalcss';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { GameStore } from '../store';
 import { GenerateCardData } from '../../../types/binering/Card';
+import { ComputerPlayer } from '../../../types/binering/ComputerPlay';
 
 @customElement('card-component')
 export class CardComponent extends LitElement {
@@ -30,7 +31,7 @@ export class CardComponent extends LitElement {
     var border = this.value == true ? `#075ac1` : '#b31414d6';
     return html`<div
       style="background-color:${background}; border-color:${border}"
-      draggable=${this.draggable ? true : false}
+      draggable=${this.isDraggable()}
       @dragstart=${this.dragstarted}
       @dragend=${this.dragended}
       @dblclick=${this.doubleClick}
@@ -41,11 +42,18 @@ export class CardComponent extends LitElement {
     </div> `;
   }
   async doubleClick(e: any) {
-    //console.log('for later');
-    //debugger;
-    await this.game.value.players[this.playerId!].remove_card(
-      e.target.getAttribute('card-data')
-    );
+    if (this.game.value.players[this.playerId!].isComputer == true) return;
+
+    if (
+      !(await ComputerPlayer.fill_empty_deck(
+        this.game.value.players[this.playerId!],
+        this.game.value
+      ))
+    ) {
+      await this.game.value.players[this.playerId!].remove_card(
+        e.target.getAttribute('card-data')
+      );
+    }
     GameStore.update(val => {
       val = this.game.value;
       return val;
@@ -63,8 +71,12 @@ export class CardComponent extends LitElement {
   connectedCallback() {
     super.connectedCallback();
   }
-
+  private isDraggable(): boolean {
+    if (this.game.value.players[this.playerId!].isComputer) return false;
+    return this.draggable;
+  }
   private draggableClass() {
+    if (this.game.value.players[this.playerId!].isComputer) return '';
     if (this.draggable) return 'draggable';
   }
 
@@ -89,6 +101,13 @@ export class CardComponent extends LitElement {
         }
         .draggable {
           cursor: pointer;
+          animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+          50% {
+            opacity: 0.3;
+          }
         }
       `,
     ];

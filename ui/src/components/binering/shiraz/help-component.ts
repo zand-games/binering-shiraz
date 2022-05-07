@@ -36,8 +36,8 @@ export class HelpComponent extends LitElement {
               <main>
                 <ol class="gradient-list">
                   <li>
-                    One player should start the game by selecting a color or
-                    Zero|One.
+                    Start the game by selecting a color. Double Click or
+                    DragDrap the last card to the Trash Box
                     <p>
                       let's imagine you selected
                       <span class="red">Red</span> card.

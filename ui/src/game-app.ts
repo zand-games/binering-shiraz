@@ -15,12 +15,17 @@ export class GameApp extends LitElement {
     return html`
       <main>
         <h1>
-          <a class="title" href="https://zand.games">Binaring Games - Shiraz</a>
+          <a class="link" href="https://zand.games">Binaring Games - Shiraz</a>
           <help-component></help-component>
         </h1>
         <board-component></board-component>
         <footer>
-          <h6>Copyright © 2022 Zand.Games. All Rights Reserved.</h6>
+          <h6>
+            This game is designed by
+            <a class="link" target="_blank" href="https://zand.games"
+              >Zand.Games.</a
+            >
+          </h6>
         </footer>
       </main>
     `;

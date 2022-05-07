@@ -10,8 +10,9 @@ export class ComputerPlayer {
   ): Promise<boolean> {
     var emptyDecks = myBoard.decks.filter(i => i.cards.length == 0);
     if (emptyDecks.length > 1) {
-      //alert('BUG: Blank Decks >1 ');
-      console.log('myBoard:' + myBoard.decks);
+      alert(
+        'BUG: Blank Decks >1 : Would you please kindly send this bug to Hedayat with a screenshot'
+      );
     }
     if (emptyDecks.length == 1) {
       const emptyDeck = emptyDecks[0];
@@ -83,11 +84,7 @@ export class ComputerPlayer {
   }
   static numerber = 0;
   public static async Move(opponent: Player, myBoard: Player, game: Game) {
-    console.log('Start Move ' + this.numerber);
     await delay(2000);
-
-    //alert('after delay');
-    debugger;
     if (!(await ComputerPlayer.fill_empty_deck(myBoard, game))) {
       if (!(await ComputerPlayer.remove_card(myBoard, game))) {
         if (
@@ -97,17 +94,13 @@ export class ComputerPlayer {
             game
           ))
         ) {
-          //alert('BUG: there is no possibel moves');
-          console.log('myBoard:' + myBoard.decks);
-          console.log('opponent:' + opponent.decks);
+          alert(
+            'BUG: there is no possible movement by computer. Would you please take screenshot for Hedayat'
+          );
         }
       }
     }
 
-    console.log('End Move ' + this.numerber);
-    this.numerber++;
-
-    // game.changeTurn(myBoard.id);
     GameStore.update(val => {
       val = game;
       return val;

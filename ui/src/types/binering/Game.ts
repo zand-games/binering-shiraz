@@ -24,8 +24,13 @@ export class Game {
   public async startNewGame() {
     this.game_finished = false;
     this.Winner = '';
-    this.player1 = new Player(1, 'Player 1', false);
-    this.player2 = new Player(2, 'Computer', true);
+    if (this.playType == PlayeType.Single) {
+      this.player1 = new Player(1, 'Player 1', false);
+      this.player2 = new Player(2, 'Computer', true);
+    } else {
+      this.player1 = new Player(1, 'Player 1', false);
+      this.player2 = new Player(2, 'Player 2', false);
+    }
 
     this.player1.onRemoveCard = async data => {
       await this.onRemoveCardEventHandler(data, this);
@@ -34,22 +39,14 @@ export class Game {
       await this.onRemoveCardEventHandler(data, this);
     };
     this.players = { 1: this.player1, 2: this.player2 };
-
-    //this.complay = new ComputerPlayer(this.player2, this);
-    // await ComputerPlayer.Move(this.player2, this.player1, this);
   }
   public game_finished!: boolean;
   private async onRemoveCardEventHandler(
     data: MoveEventInfo,
     game: Game
   ): Promise<void> {
-    // data.player.turn = false;
-    debugger;
     var oponent = game.getOponent(data.player.id);
-    // oponent.turn = true;
-    //if (data.player.isComputer == false) {
     await this.changeTurn(data.player.id);
-    // }
     if (data.player.trash?.selectedCard == Color.NotSelected)
       data.player.trash.setColor(data.playedCard);
 
@@ -59,7 +56,7 @@ export class Game {
   }
   private calc_score(winner: Player, looser: Player) {
     var count = 0;
-    //winner.decks.forEach(dec => (count += dec.cards.length * 3));
+    winner.decks.forEach(dec => (count += dec.cards.length * 3));
 
     // in the opponent board
     looser.decks.forEach(dec =>
