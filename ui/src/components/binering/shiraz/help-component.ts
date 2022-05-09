@@ -36,65 +36,68 @@ export class HelpComponent extends LitElement {
               <main>
                 <ol class="gradient-list">
                   <li>
-                    Start the game by selecting a color. Double Click or
-                    DragDrap the last card to the Trash Box
+                    <h2>Scoring:</h2>
                     <p>
-                      let's imagine you selected
-                      <span class="red">Red</span> card.
+                      If you lose a total score of -21 points in all rounds, you
+                      lost the game.
                     </p>
+                    <p>
+                      If you removes all of your chosen cards from your
+                      columns(Decks) sooner, your opponent loses the round.
+                    </p>
+                    <p>
+                      All the cards left at the end of the round become the
+                      negative points of the loser.
+                    </p>
+                    <p>The number of rounds goes on until one player loses.</p>
                   </li>
                   <li>
-                    You win, If you removed all the
-                    <span class="red">Red</span> cards from your decks.
+                    <h2>Start a round:</h2>
+                    <p>In each round you must be either 1 or 0.</p>
+                    <p>Round starter select the card</p>
+                    <p>The round starter changes in turn.</p>
                   </li>
                   <li>
-                    You can only move the cards from the last positoin of your
-                    decks.
-                    <p>
-                      You can Drag&Drop your <span class="red">Red</span> card
-                      to your TrashBox. Double click also works. <br />All
-                      <span class="red">Red</span> cards that are next to the
-                      last card will be removed.
-                    </p>
-                  </li>
-                  <li>
-                    You can transfer <span class="blue">Blue</span> card to your
-                    opponent.
-                    <p>
-                      You can only transfer card to your opponent if all your
-                      decks end up with <span class="blue">Blue</span> cards,
-                      which means you have no available
-                      <span class="red">Red</span> card in your decks to be
-                      moved to TrashBox. We call this situtaion: "Decks are
-                      Locked"
-                    </p>
-                  </li>
-                  <li>
-                    Empty deck is not allowed.
-                    <p>
-                      If one of your decks is empty, you can not move or
-                      transfer any card. You have to fill out your empty deck
-                      before any other move.
-                    </p>
-                    <p>The maximum number of cards in each deck is 8</p>
-                  </li>
-                  <li>
-                    You can also move your cards internally
-                    <p>
-                      It means you can transfer a card from one deck to another.
-                      You may want to do it because of your strategy. You can
-                      lock all your decks by an internal move to be ready to
-                      transfer a card to opponent.
-                    </p>
-                  </li>
+                    <h2>Decks(Columns)</h2>
 
-                  <li>
-                    Score calculation:
                     <p>
-                      If you win while you have 5
-                      <span class="blue">Blue</span> cards in your decks, you
-                      got 10 points. 2 point per card. Either your opponent has
-                      got -10.
+                      Each player has 4 columns(Decks) with maximan number of 8
+                      cards
+                    </p>
+                    <p>
+                      You can only play with the cards in the last position of
+                      the decks.
+                    </p>
+                  </li>
+                  <li>
+                    <h2>Remove your card</h2>
+                    <p>
+                      To remove one of your card in the last position of deck,
+                      you can drag&drop it to trash-box in the left side. Double
+                      click on a card also works for removing it.
+                    </p>
+                    <p>
+                      You can not remove any card while you have an empty deck.
+                      You need to fill it out before any other move.
+                    </p>
+                  </li>
+                  <li>
+                    <h2>Transfer card to your opponent</h2>
+                    <p>You can transfer your opponent cards form your decks.</p>
+                    <p>
+                      You can only transfer a card, if all the cards of last
+                      postions of decks, are in the same type of opponents card.
+                    </p>
+                  </li>
+                  <li>
+                    <h2>Internal move</h2>
+                    <p>
+                      You can also move a card between your decks.(internal
+                      move)
+                    </p>
+                    <p>
+                      You may need to do this movement because of your strategy
+                      to push more negative point to your opponent
                     </p>
                   </li>
                 </ol>
@@ -282,6 +285,9 @@ export class HelpComponent extends LitElement {
 
         .winning-message.show {
           display: flex;
+        }
+        .bold {
+          font-weight: bold;
         }
       `,
     ];
