@@ -11,31 +11,48 @@ import './playertype-component';
 export class BoardComponent extends LitElement {
   game = new StoreSubscriber(this, () => GameStore);
 
-  async playAgain() {
-    await this.game.value.startNewGame();
+  async play_again() {
+    if (this.game.value.game_finished) await this.game.value.startNewGame();
+    else await this.game.value.startNewRound();
     GameStore.update(val => {
       val = this.game.value;
       return val;
     });
   }
-  gameStatus(div: string) {
-    if (div == 'status')
-      return this.game.value.game_finished == true ? '' : 'hide';
-    else return this.game.value.game_finished == true ? 'gamedisabled' : '';
-  }
+
   render() {
     return html`
-      <div class="${this.gameStatus('status')}">
-        <h4>${this.game.value.Winner!}</h4>
-        <button @click=${this.playAgain}>Play Again!</button>
+      <div
+        class="${this.game.value.game_finished == true ||
+        this.game.value.round_finished == true
+          ? 'show'
+          : 'hide'}"
+      >
+        <h4>${this.game.value.looser!}</h4>
+        <button @click=${this.play_again}>
+          ${this.game.value.game_finished
+            ? 'Play new game!'
+            : 'Play new round!'}
+        </button>
       </div>
       <playertype-component></playertype-component>
-      <div class="container ${this.gameStatus('game')}">
-        <section-component .playerId=${1}></section-component>
-        <section-component .playerId=${2}></section-component>
+
+      <div
+        class="container ${this.game.value.game_finished == true ||
+        this.game.value.round_finished
+          ? 'gamedisabled'
+          : ''}"
+      >
+        <div>
+          <section-component .playerId=${1}></section-component>
+        </div>
+        <div>
+          <section-component .playerId=${2}></section-component>
+        </div>
       </div>
     `;
   }
+
   static get styles() {
     return [
       gcss,
@@ -51,6 +68,9 @@ export class BoardComponent extends LitElement {
         }
         .hide {
           display: none;
+        }
+        .show {
+          display: inline;
         }
         button {
           cursor: pointer;

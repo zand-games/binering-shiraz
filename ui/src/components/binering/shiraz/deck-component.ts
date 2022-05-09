@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './card-component';
 import cssg from '../globalcss';
-import '../events';
 import { GameStore } from '../store';
 import { StoreSubscriber } from 'lit-svelte-stores';
 

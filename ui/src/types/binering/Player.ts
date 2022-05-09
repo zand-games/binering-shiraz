@@ -11,6 +11,7 @@ export class Player {
   public name: string = '';
   readonly id: number;
   private _isComputer: boolean = false;
+  public score: number = 0;
   public get isComputer() {
     return this._isComputer;
   }
@@ -24,7 +25,8 @@ export class Player {
   }
   trash?: Trash;
 
-  private _deckTemplate = [true, true, true, true, false, false, false, false];
+  private _deckTemplate = [true, false];
+  //private _deckTemplate = [true, true, true, true, false, false, false, false];
   public counter: number = 0;
   constructor(id: number, name: string, isComputer: boolean) {
     this.id = id;
@@ -37,19 +39,17 @@ export class Player {
     this.trash = new Trash(this.id);
     this._isComputer = isComputer;
   }
+  public new_round() {
+    var deck1 = new Deck(this.id, 'a', this.shuffle([...this._deckTemplate]));
+    var deck2 = new Deck(this.id, 'b', this.shuffle([...this._deckTemplate]));
+    var deck3 = new Deck(this.id, 'c', this.shuffle([...this._deckTemplate]));
+    var deck4 = new Deck(this.id, 'd', this.shuffle([...this._deckTemplate]));
+    this.decks = [deck1, deck2, deck3, deck4];
+    this.trash = new Trash(this.id);
+  }
   public getDeck(key: string) {
     return this.decks.find(i => i.id == key);
   }
-
-  // public calc_score() {
-  //   var count = 0;
-  //   this.decks.forEach(dec=>)
-  //   this.decks.forEach(
-  //     dec => (count += 2 * dec.howManyRemained(!this.trash?.value!))
-  //   );
-  //   return count;
-  // }
-
   public can_Card_Transfer_To_Oponent(): boolean {
     if (this.trash!.selectedCard == Color.NotSelected) return false;
     // Deck Can not Be empty

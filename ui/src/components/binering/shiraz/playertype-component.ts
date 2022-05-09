@@ -26,7 +26,7 @@ export class PlayerTypeComponent extends LitElement {
 
   render() {
     return html`
-      <div>
+      <div class="container">
         <label for="single" class="l-radio">
           <input
             type="radio"
@@ -65,12 +65,13 @@ export class PlayerTypeComponent extends LitElement {
   static get styles() {
     return [
       css`
-        body {
+        .container {
           font-family: sans-serif;
-          min-height: 100vh;
+          /* min-height: 100vh; */
           display: flex;
           justify-content: center;
           align-items: center;
+          margin-bottom: 0.3em;
         }
 
         * {
@@ -91,6 +92,8 @@ export class PlayerTypeComponent extends LitElement {
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */
           user-select: none; /* Standard */
+          border-radius: 25px;
+          border: 1px solid #656a5e;
         }
         .l-radio:hover,
         .l-radio:focus-within {
@@ -123,6 +126,11 @@ export class PlayerTypeComponent extends LitElement {
           line-height: 20px;
           padding: 0 8px;
         }
+        /* .container {
+          border: 2px solid #656a5e;
+          padding: 10px;
+          width: 100px;
+        } */
       `,
     ];
   }

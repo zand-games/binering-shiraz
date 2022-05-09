@@ -28,6 +28,9 @@ export class TrashComponent extends LitElement {
       _divValue = '0';
     }
     return html`
+      <div class="score">
+        Total Score: ${this.game.value.getScore(this.playerId)}
+      </div>
       <div
         @dragenter=${this.dragEntered}
         @dragend=${this.dragEnded}
@@ -94,6 +97,17 @@ export class TrashComponent extends LitElement {
           font-size: 0.4em;
           color: white;
         }
+        .score {
+          font-size: 0.8em;
+          align-items: left;
+          width: 200px;
+          padding: 0.5em;
+          background-color: #353837;
+          color: white;
+          margin-bottom: -1px;
+          border-top-right-radius: 50px;
+          text-align: left;
+        }
         .trashbox {
           height: 120px;
           width: 200px;
@@ -126,6 +140,12 @@ export class TrashComponent extends LitElement {
           font-size: 0.4em;
           background-color: #23303e;
           opacity: 0.8;
+          animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker {
+          50% {
+            opacity: 0.3;
+          }
         }
         .value {
         }

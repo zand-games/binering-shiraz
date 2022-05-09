@@ -7,23 +7,32 @@ export enum PlayeType {
   Single = 1,
   MultiPlayer = 2,
 }
+interface Round {
+  round_looserid: number;
+  score: number;
+}
 export class Game {
   public players: Record<number, Player> = {};
   private player1!: Player;
   private player2!: Player;
-  public Winner?: string;
+  public looser?: string;
   public playType: PlayeType = PlayeType.Single;
+  public rounds: Array<Round> = [];
+  public game_finished: boolean = false;
+  public round_finished: boolean = false;
   //private complay!: ComputerPlayer;
   constructor() {
     this.startNewGame();
-    //this.game_finished = true;
   }
   public ResumeGame(game_hash: String) {
     // fetch game from DHT
   }
   public async startNewGame() {
+    this.looser = '';
+    this.rounds = [];
     this.game_finished = false;
-    this.Winner = '';
+    this.round_finished = false;
+
     if (this.playType == PlayeType.Single) {
       this.player1 = new Player(1, 'Player 1', false);
       this.player2 = new Player(2, 'Computer', true);
@@ -31,6 +40,8 @@ export class Game {
       this.player1 = new Player(1, 'Player 1', false);
       this.player2 = new Player(2, 'Player 2', false);
     }
+
+    this.player1.turn = true;
 
     this.player1.onRemoveCard = async data => {
       await this.onRemoveCardEventHandler(data, this);
@@ -40,7 +51,18 @@ export class Game {
     };
     this.players = { 1: this.player1, 2: this.player2 };
   }
-  public game_finished!: boolean;
+
+  public async startNewRound() {
+    this.looser = '';
+    this.game_finished = false;
+    this.round_finished = false;
+
+    this.player1.new_round();
+    this.player2.new_round();
+
+    if (this.rounds.length % 2 == 0) this.changeTurn(2);
+    else this.changeTurn(1);
+  }
   private async onRemoveCardEventHandler(
     data: MoveEventInfo,
     game: Game
@@ -56,36 +78,49 @@ export class Game {
   }
   private calc_score(winner: Player, looser: Player) {
     var count = 0;
-    // All card of looser in the game * 3
-    winner.decks.forEach(dec => (count += dec.cards.length * 2));
-
-    // in the opponent board
-    // looser.decks.forEach(dec =>
-    //   dec.cards.forEach(card =>
-    //     card == !winner.trash?.value ? (count += 3) : (count += 0)
-    //   )
-    // );
-    return count;
+    winner.decks.forEach(dec => (count += dec.cards.length));
+    looser.decks.forEach(dec => (count += dec.cards.length));
+    return -count;
   }
-  private check_winner() {
-    if (this.player1.remainedCard() == 0) {
-      // alert('Player ' + 1 + 'Won the round!');
-      this.Winner =
-        this.player1.name +
-        ' Won the round!  Score:' +
-        this.calc_score(this.player1, this.player2);
+
+  private check_game_looer(round_looserid: number) {
+    const count = this.getScore(round_looserid);
+
+    if (Math.abs(count) >= 21) {
+      this.looser = this.players[round_looserid].name + ' lost the game! ';
+
       this.game_finished = true;
+    }
+  }
+  private check_round_looser() {
+    if (this.player1.remainedCard() == 0) {
+      const score = this.calc_score(this.player1, this.player2);
+      this.looser = this.player2.name + ' lost the round!  Score:' + score;
+      this.rounds.push({
+        round_looserid: this.player2.id,
+        score: score,
+      });
+      this.round_finished = true;
+      this.check_game_looer(this.player2.id);
     }
     if (this.player2.remainedCard() == 0) {
-      this.Winner =
-        this.player2.name +
-        ' Won the round! Score:' +
-        this.calc_score(this.player2, this.player1);
-      // alert('Player ' + 2 + 'Won the round!');
-      this.game_finished = true;
+      const score = this.calc_score(this.player2, this.player1);
+      this.looser = this.player1.name + ' lost the round! Score:' + score;
+      this.round_finished = true;
+      this.rounds.push({
+        round_looserid: this.player1.id,
+        score: score,
+      });
+      this.check_game_looer(this.player1.id);
     }
   }
-
+  public getScore(playerId: number) {
+    var count = 0;
+    this.rounds
+      .filter(i => i.round_looserid == playerId)
+      .map(j => (count += j.score));
+    return count;
+  }
   public async changeTurn(playerId?: number) {
     if (!playerId) {
       // color is already selected
@@ -100,17 +135,9 @@ export class Game {
       this.players[playerId!].turn = false;
       this.getOponent(playerId).turn = true;
     }
-    this.check_winner();
-    // if (this.playType == PlayeType.Single) {
-    //   if (this.game_finished == false) {
-    //     if (this.player2.turn == true) this.complay.Move(this.player1);
-    //   }
-    // }
-    //debugger;
-    if (this.game_finished == false) {
-      // if (this.player1.isComputer && this.player1.turn) {
-      //   await ComputerPlayer.Move(this.player2, this.player1, this);
-      // }
+    this.check_round_looser();
+
+    if (this.round_finished == false) {
       if (this.player2.isComputer && this.player2.turn) {
         ComputerPlayer.Move(this.player1, this.player2, this);
       }
@@ -122,9 +149,6 @@ export class Game {
     else throw new Error('PlayerId is invalid!');
   }
 
-  /// pop  :take the last item from array, we need it for Trash dragDrop.
-  // push  : add item to last postion. so we need it to internal movement.
-  //unshift : add item to first position. when oponent inject card to the deck
   public async transfer_card(
     input: string,
     target_player: number,

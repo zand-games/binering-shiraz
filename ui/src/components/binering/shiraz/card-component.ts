@@ -101,9 +101,10 @@ export class CardComponent extends LitElement {
         }
         .draggable {
           cursor: pointer;
+        }
+        .draggable:hover {
           animation: blinker 1s linear infinite;
         }
-
         @keyframes blinker {
           50% {
             opacity: 0.3;
