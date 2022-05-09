@@ -25,8 +25,8 @@ export class Player {
   }
   trash?: Trash;
 
-  private _deckTemplate = [true, false];
-  //private _deckTemplate = [true, true, true, true, false, false, false, false];
+  //private _deckTemplate = [true, false];
+  private _deckTemplate = [true, false, true, false, true, false, true, false];
   public counter: number = 0;
   constructor(id: number, name: string, isComputer: boolean) {
     this.id = id;
