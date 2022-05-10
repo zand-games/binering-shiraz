@@ -5,6 +5,7 @@ import './trash-component';
 import gcss from '../globalcss';
 import { Player } from '../../../types/binering/Player';
 import { GameStore } from '../store';
+import { StoreSubscriber } from 'lit-svelte-stores';
 @customElement('section-component')
 export class SectionComponent extends LitElement {
   @state()
@@ -12,11 +13,12 @@ export class SectionComponent extends LitElement {
 
   @property()
   private player?: Player;
-  async connectedCallback() {
-    await super.connectedCallback();
-    GameStore.subscribe(value => (this.player = value.players[this.playerId!]));
-  }
+
+  game = new StoreSubscriber(this, () => GameStore);
+
   render() {
+    this.style.setProperty('--color-highlight', this.getColor());
+
     if (this.player == undefined || this.player!.decks == undefined)
       return html``;
     return html`
@@ -37,6 +39,21 @@ export class SectionComponent extends LitElement {
     `;
   }
 
+  async connectedCallback() {
+    super.connectedCallback();
+    await super.connectedCallback();
+    GameStore.subscribe(value => (this.player = value.players[this.playerId!]));
+  }
+  getColor() {
+    var color: any = [];
+
+    color.push(this.player!.decks[0].getDecimal());
+    color.push(this.player!.decks[1].getDecimal());
+    color.push(this.player!.decks[3].getDecimal());
+    color.push(this.player!.decks[3].getPercentage());
+
+    return `rgba(${color.join()})`;
+  }
   static get styles() {
     return [
       gcss,
@@ -52,6 +69,10 @@ export class SectionComponent extends LitElement {
           justify-content: space-around;
           align-items: center;
           align-content: center;
+        }
+
+        .dynamic-color {
+          background-color: var(--color-highlight);
         }
       `,
     ];

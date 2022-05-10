@@ -71,7 +71,7 @@ export class PlayerTypeComponent extends LitElement {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-bottom: 0.3em;
+          margin-bottom: 1em;
         }
 
         * {

@@ -22,27 +22,30 @@ export class DeckComponent extends LitElement {
   }
 
   render() {
-    return html` <div
-      class="deck"
-      @drop=${this.droped}
-      @dragover=${this.dragovered}
-      @dragenter=${this.dragEntered}
-      @dragend=${this.dragended}
-      @dragleave=${this.dragleaved}
-    >
-      ${this.deck!.cards.length > 0
-        ? this.deck!.cards.map(
-            (card, i, arr) =>
-              html`<card-component
-                .playerId=${this.playerId}
-                .value=${card}
-                .deckId=${this.deckId}
-                .draggable=${this.isdraggable(i, arr)}
-              >
-              </card-component>`
-          )
-        : html`<div class="empty">${this.deckId.toUpperCase()}</div>`}
-    </div>`;
+    return html` <div class="tooltip">
+        <span class="tooltiptext">${this.deck?.getDecimal()}</span>
+      </div>
+      <div
+        class="deck"
+        @drop=${this.droped}
+        @dragover=${this.dragovered}
+        @dragenter=${this.dragEntered}
+        @dragend=${this.dragended}
+        @dragleave=${this.dragleaved}
+      >
+        ${this.deck!.cards.length > 0
+          ? this.deck!.cards.map(
+              (card, i, arr) =>
+                html`<card-component
+                  .playerId=${this.playerId}
+                  .value=${card}
+                  .deckId=${this.deckId}
+                  .draggable=${this.isdraggable(i, arr)}
+                >
+                </card-component>`
+            )
+          : html`<div class="empty">${this.deckId.toUpperCase()}</div>`}
+      </div>`;
   }
 
   isdraggable(index: number, arr: boolean[]) {
@@ -115,13 +118,51 @@ export class DeckComponent extends LitElement {
           background-color: var(--background-color);
           box-shadow: 3px 3px 3px gray;
           color: white;
-          font-size: 2em;
+          /* font-size: 0.5em; */
           border: 3px solid;
           border-color: gray;
           -webkit-user-select: none; /* Safari */
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */
           user-select: none; /* Standard */
+        }
+
+        .tooltip {
+          position: relative;
+          display: inline-block;
+          border-bottom: 1px dotted black;
+        }
+
+        .tooltip .tooltiptext {
+          visibility: visible;
+          width: 40px;
+          background-color: black;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 150%;
+          left: 50%;
+          margin-left: -20px;
+          font-size: 0.6em;
+        }
+
+        .tooltip .tooltiptext::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: black transparent transparent transparent;
+          visibility: visible;
+        }
+
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
         }
       `,
     ];

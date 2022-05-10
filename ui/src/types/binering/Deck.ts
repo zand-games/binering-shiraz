@@ -10,7 +10,20 @@ export class Deck {
     this.id = deckId;
     this.cards = cards;
   }
+  private boolArrToNumber = (arr: Array<boolean>): number =>
+    parseInt(arr.map(r => (r ? '1' : '0')).join(''), 2);
+  public getDecimal() {
+    // var a = [false, true, false, true];
+    // var b: any = a.reduce((res, x) => (res << 1) | x);
+    // var result: any = this.cards.reduce((res, x) => (res << 1) | x);
+    return this.boolArrToNumber(this.cards);
+  }
 
+  public getPercentage(): string {
+    const result = ((this.getDecimal() * 100) / 255).toString() + '%';
+    //  console.log(result);
+    return result;
+  }
   /// pop  :take the last item from array, we need it for Trash dragDrop.
   // push  : add item to last postion. so we need it to internal movement.
   //unshift : add item to first position. when oponent inject card to the deck

@@ -52,7 +52,11 @@ export class BoardComponent extends LitElement {
       </div>
     `;
   }
+  connectedCallback() {
+    super.connectedCallback();
 
+    this.style.setProperty('--c', '255');
+  }
   static get styles() {
     return [
       gcss,
@@ -88,6 +92,10 @@ export class BoardComponent extends LitElement {
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */
           user-select: none; /* Standard */
+        }
+
+        .dynamic-color {
+          background-color: cmyk(var(--c, --m, --y, --k));
         }
       `,
     ];
