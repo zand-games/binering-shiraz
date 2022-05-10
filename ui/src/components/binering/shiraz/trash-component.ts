@@ -21,7 +21,9 @@ export class TrashComponent extends LitElement {
   render() {
     var _divValue = '';
     if (this.trash!.selectedCard == Color.NotSelected) {
-      _divValue = '?';
+      if (this.game.value.players[this.playerId].isComputer == false)
+        _divValue = 'Drag card here!';
+      else _divValue = '?';
     } else if (this.trash!.selectedCard == Color.True) {
       _divValue = '1';
     } else {
@@ -125,6 +127,17 @@ export class TrashComponent extends LitElement {
         .notdefnied {
           background-color: gray;
         }
+        .notdefnied div:nth-last-child(2) {
+          padding-top: 0.5em;
+          padding-bottom: 0.5em;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 0.4em;
+          color: orange;
+        }
+
+        /* .notdefnied .value {
+          font-size: 0.7em;
+        } */
         .one {
           background-color: blue;
         }
