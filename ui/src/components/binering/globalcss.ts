@@ -6,4 +6,8 @@ export default css`
   *::after {
     box-sizing: border-box;
   }
+  *:not(#bg) {
+    z-index: 1;
+    position: relative;
+  }
 `;

@@ -17,8 +17,7 @@ export class SectionComponent extends LitElement {
   game = new StoreSubscriber(this, () => GameStore);
 
   render() {
-    this.style.setProperty('--color-highlight', this.getColor());
-
+    // this.style.setProperty('--color-highlight', this.getColor());
     if (this.player == undefined || this.player!.decks == undefined)
       return html``;
     return html`
@@ -44,15 +43,45 @@ export class SectionComponent extends LitElement {
     await super.connectedCallback();
     GameStore.subscribe(value => (this.player = value.players[this.playerId!]));
   }
-  getColor() {
-    var color: any = [];
 
-    color.push(this.player!.decks[0].getDecimal());
-    color.push(this.player!.decks[1].getDecimal());
-    color.push(this.player!.decks[3].getDecimal());
-    color.push(this.player!.decks[3].getPercentage());
+  getLocation() {
+    const v1 = this.player!.decks[0].getDecimal();
+    const v2 = this.player!.decks[1].getDecimal();
+    const v3 = this.player!.decks[2].getDecimal();
+    const v4 = this.player!.decks[3].getDecimal();
+    // var result = this.Parse4ByteHexGeoTag(v1 + v2 + v3 + v4);
+    // console.log(this.convertBytesToLocaion(v1, v2, v3, v4));
+    return;
+  }
 
-    return `rgba(${color.join()})`;
+  private convertBytesToLocaion(
+    v1: number,
+    v2: number,
+    v3: number,
+    v4: number
+  ) {
+    var step2 = (v4 << 48) | (v3 << 32) | (v2 << 16) | v1;
+    const step3 = parseFloat(step2.toString()) / 30000;
+    var step4 = Math.trunc(step3) / 60;
+    var step5 = step3 - Math.trunc(step4) * 60;
+    // return 'lang:' + Math.trunc(lang) + ' long:' + long;
+    //return Math.trunc(long) + ', ' + Math.trunc(lang);
+    return step4.toFixed(3) + ', ' + step5.toFixed(3);
+  }
+
+  // public Parse4ByteHexGeoTag(hex: string) {
+  //   debugger;
+  //   var deg = parseInt(hex.substring(0, 2));
+  //   var time = this.convertTodecimal(hex.substring(3)) / 60;
+  //   var min = Math.trunc(time);
+  //   var sec = (time % 60) * 60;
+
+  //   return deg + '° ' + Math.trunc(min) + "' " + Math.trunc(sec) + "''";
+  //   //  return `${deg + "°" + min +  /"\'/" + }`;
+  //   //return [deg, min, sec];
+  // }
+  private convertTodecimal(hexString: any) {
+    return parseInt(hexString, 16);
   }
   static get styles() {
     return [

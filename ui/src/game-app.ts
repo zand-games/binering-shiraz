@@ -47,7 +47,7 @@ export class GameApp extends LitElement {
       margin-left: auto;
       margin-right: auto;
 
-      background-color: rgb(154 181 3 / 55%);
+      background-color: rgb(154 181 3 / 100%);
     }
 
     :host {
@@ -69,6 +69,9 @@ export class GameApp extends LitElement {
       -moz-user-select: none; /* Firefox */
       -ms-user-select: none; /* IE10+/Edge */
       user-select: none; /* Standard */
+      position: relative;
+      z-index: 5;
+      text-shadow: 2px 2px 5px white;
     }
     h6 {
       padding: 10px;

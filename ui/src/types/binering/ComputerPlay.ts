@@ -84,7 +84,7 @@ export class ComputerPlayer {
   }
   static numerber = 0;
   public static async Move(opponent: Player, myBoard: Player, game: Game) {
-    await delay(2000);
+    await delay(6000);
     if (!(await ComputerPlayer.fill_empty_deck(myBoard, game))) {
       if (!(await ComputerPlayer.remove_card(myBoard, game))) {
         if (

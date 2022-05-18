@@ -1,6 +1,6 @@
 import { MoveEventInfo, Player } from './Player';
 import { Color } from './Trash';
-import { parseCardInfo } from '../utils';
+import { find_location, parseCardInfo } from '../utils';
 import { HtmlTagHydration } from 'svelte/internal';
 import { ComputerPlayer } from './ComputerPlay';
 export enum PlayeType {
@@ -20,7 +20,9 @@ export class Game {
   public rounds: Array<Round> = [];
   public game_finished: boolean = false;
   public round_finished: boolean = false;
-  //private complay!: ComputerPlayer;
+  public location: string = 'Shiraz, Iran';
+  public coordination: string = 'Shiraz, Iran';
+  public locationUrl: string = '';
   constructor() {
     this.startNewGame();
   }
@@ -50,6 +52,7 @@ export class Game {
       await this.onRemoveCardEventHandler(data, this);
     };
     this.players = { 1: this.player1, 2: this.player2 };
+    find_location(this);
   }
 
   public async startNewRound() {
@@ -75,6 +78,7 @@ export class Game {
     if (oponent.trash?.selectedCard == Color.NotSelected) {
       oponent.trash.setColor(!data.playedCard);
     }
+    find_location(this);
   }
   private calc_score(winner: Player, looser: Player) {
     var count = 0;
@@ -172,6 +176,7 @@ export class Game {
         .getDeck(source_card.deckId!)
         ?.cards.pop();
     }
+    find_location(this);
 
     await this.changeTurn();
   }

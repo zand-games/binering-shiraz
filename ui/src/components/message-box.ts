@@ -26,7 +26,7 @@ export class Messagebox extends LitElement {
 
     // // div!.innerHTML = e.detail;
     this.message = e.detail;
-    console.log(this.message);
+    //console.log(this.message);
     var self = this;
     this.requestUpdate();
 
@@ -63,7 +63,7 @@ export class Messagebox extends LitElement {
           height: 40px;
           align-items: center;
           align-content: center;
-          z-index: 101;
+          /* z-index: 101; */
           top: 0;
           left: 0;
           right: 0;

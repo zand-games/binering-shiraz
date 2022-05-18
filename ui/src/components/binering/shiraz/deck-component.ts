@@ -141,8 +141,8 @@ export class DeckComponent extends LitElement {
           text-align: center;
           border-radius: 6px;
           padding: 5px 0;
-          position: absolute;
-          z-index: 1;
+          position: absolute !important;
+          /* z-index: 1; */
           bottom: 150%;
           left: 50%;
           margin-left: -20px;

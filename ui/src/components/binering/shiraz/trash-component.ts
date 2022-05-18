@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { state, customElement, property } from 'lit/decorators.js';
 
 import cssg from '../globalcss';
@@ -8,6 +8,9 @@ import { Player } from '../../../types/binering/Player';
 import { tsGenerator } from '@type-craft/content';
 import { Game } from '../../../types/binering/Game';
 import { StoreSubscriber } from 'lit-svelte-stores';
+import { find_location } from '../../../types/utils';
+import { until } from 'lit/directives/until.js';
+
 @customElement('trash-component')
 export class TrashComponent extends LitElement {
   @state()
@@ -51,6 +54,7 @@ export class TrashComponent extends LitElement {
       </div>
     `;
   }
+
   dragovered(e: any) {
     if (
       this.game.value.players[this.playerId!].can_card_removable(
@@ -79,7 +83,6 @@ export class TrashComponent extends LitElement {
       return val;
     });
   }
-
   classSelector() {
     if (this.trash!.selectedCard == Color.NotSelected) {
       return 'notdefnied';

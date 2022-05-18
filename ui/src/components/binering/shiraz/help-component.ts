@@ -188,7 +188,7 @@ export class HelpComponent extends LitElement {
           font: 900 2.5em/1 'Montserrat';
           justify-content: flex-end;
           padding: 0.125em 0.25em;
-          z-index: 1;
+          z-index: 10;
         }
         ol.gradient-list > li:nth-child(10n + 1):before {
           background: linear-gradient(
@@ -279,7 +279,7 @@ export class HelpComponent extends LitElement {
           /* color: white; */
           font-size: 1rem;
           flex-direction: column;
-          z-index: 2147483647;
+          /* z-index: 2147483647; */
           overflow: scroll;
         }
 

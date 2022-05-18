@@ -83,6 +83,7 @@ export class PlayerTypeComponent extends LitElement {
           border-radius: 50px;
           display: inline-flex;
           cursor: pointer;
+          background-color: #ddce98;
           transition: background 0.2s ease;
           margin: 8px 0;
           -webkit-tap-highlight-color: transparent;

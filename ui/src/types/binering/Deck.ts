@@ -10,13 +10,20 @@ export class Deck {
     this.id = deckId;
     this.cards = cards;
   }
-  private boolArrToNumber = (arr: Array<boolean>): number =>
-    parseInt(arr.map(r => (r ? '1' : '0')).join(''), 2);
+  public static boolArrToNumber = (arr: Array<boolean>): number => {
+    if (arr == null || arr == undefined || arr.length == 0) return 0;
+    return parseInt(arr.map(r => (r ? '1' : '0')).join(''), 2);
+  };
+
   public getDecimal() {
     // var a = [false, true, false, true];
     // var b: any = a.reduce((res, x) => (res << 1) | x);
     // var result: any = this.cards.reduce((res, x) => (res << 1) | x);
-    return this.boolArrToNumber(this.cards);
+    return Deck.boolArrToNumber(this.cards);
+  }
+
+  public getHex() {
+    return this.getDecimal().toString(16);
   }
 
   public getPercentage(): string {
