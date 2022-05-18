@@ -33,7 +33,7 @@ export class TrashComponent extends LitElement {
       _divValue = '0';
     }
     return html`
-      <div class="score">
+      <div class="score shadow">
         Total Score: ${this.game.value.getScore(this.playerId)}
       </div>
       <div
@@ -52,9 +52,20 @@ export class TrashComponent extends LitElement {
 
         <div class="name">${this.game.value.players[this.playerId!].name}</div>
       </div>
+      <div class="coordination shadow nonselectable">
+        <span>${this.player.isLatitute ? 'Latitude: ' : 'Longitude: '}</span>
+        <span>${this.player.get_location()}</span>
+      </div>
     `;
   }
 
+  show_coordination() {
+    return this.trash?.selectedCard == Color.NotSelected ? 'hide' : 'show';
+  }
+
+  private get player() {
+    return this.game.value.players[this.playerId!];
+  }
   dragovered(e: any) {
     if (
       this.game.value.players[this.playerId!].can_card_removable(
@@ -148,9 +159,9 @@ export class TrashComponent extends LitElement {
           background-color: red;
         }
         .shadow {
-          -moz-box-shadow: 3px 3px 5px 6px #ccc;
-          -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-          box-shadow: 3px 3px 5px 6px #ccc;
+          -moz-box-shadow: 5px 5px 5px 5px #ccc;
+          -webkit-box-shadow: 5px 5px 5px 5px #ccc;
+          box-shadow: 5px 5px 5px 5px #ccc;
         }
         .turn {
           font-size: 0.4em;
@@ -163,7 +174,24 @@ export class TrashComponent extends LitElement {
             opacity: 0.3;
           }
         }
-        .value {
+        .show {
+          visibility: visible;
+        }
+
+        .hide {
+          visibility: hidden;
+        }
+        .coordination {
+          font-size: 0.6em;
+          align-items: left;
+          width: 200px;
+          background-color: #353837;
+          color: white;
+          margin-bottom: 5px;
+          padding: 0.8rem;
+          text-align: right;
+          border-bottom-left-radius: 50px;
+          font-family: Arial, Helvetica, sans-serif;
         }
       `,
     ];
