@@ -49,6 +49,7 @@ export async function find_location(game: Game) {
   +'&localityLanguage=en';
   //console.log('api:' + bdcApi);
   var location = await getApi(bdcApi);
+  //get_wiki_location(lat, long);
   google = google + lat + ',' + long;
   GameStore.update(val => {
     val.location = location;
@@ -72,4 +73,23 @@ async function getApi(url: string) {
 
   loc = output.join(', ');
   return loc;
+}
+
+function get_wiki_location(lat: string, long: string) {
+  var url =
+    'https://en.wikipedia.org/w/api.php?action=query&format=json&list=geosearch&gsradius=1000&gscoord=';
+  url += lat.trim() + '|' + long.trim() + '&origin=*';
+  console.log(url);
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {},
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 }

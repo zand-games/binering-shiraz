@@ -15,7 +15,7 @@ export class GameApp extends LitElement {
     return html`
       <main>
         <h1>
-          <a class="title" href="https://zand.games">Binaring Games - Shiraz</a>
+          <a class="title" href="https://zand.games">Shiraz Game</a>
           <help-component></help-component>
         </h1>
         <board-component></board-component>
