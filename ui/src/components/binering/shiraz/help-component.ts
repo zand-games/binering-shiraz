@@ -81,7 +81,7 @@ export class HelpComponent extends LitElement {
                     </p>
                     <p>
                       B) If all your Movable Cards are
-                      <span class="blue">1</span>, which means your have no card
+                      <span class="blue">1</span>, which means you have no card
                       to collect, so you are able to transfer one of them to
                       your opponent columns that has less than 8 cards. This
                       card will be added to the beginning of the column.
@@ -116,7 +116,6 @@ export class HelpComponent extends LitElement {
                     <p>
                       A) at the top of each column there is a number, which is
                       the Decimal conversion of the column which is in byte.
-                      More story will be added based on this number.
                     </p>
                     <p>
                       B) Player who selected <b>0 provides Latitude</b> and the
@@ -124,8 +123,7 @@ export class HelpComponent extends LitElement {
                       geographical coordinates for map. On any move of each
                       player, the value of each column is changed, and
                       consequently the coordination of location on the map is
-                      changed. More story will be added to the game based on
-                      this topic later.
+                      changed.
                     </p>
                   </li>
                   <li>
@@ -135,6 +133,8 @@ export class HelpComponent extends LitElement {
                       game.
                       <br />
                       contact@zand.games
+                      <br />
+                      With much LOVE, Hedayat
                       <br />
                       <a href="https://www.zand.games/" target="_blank"
                         >Zand.Games</a
