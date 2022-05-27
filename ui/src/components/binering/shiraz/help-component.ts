@@ -119,7 +119,13 @@ export class HelpComponent extends LitElement {
                       the Decimal conversion of the column which is in byte.
                     </p>
                     <p>
-                      B) Player who selected <b>0 provides Latitude</b> and the
+                      B) Double click on empty space to hide the board game and
+                      see the pure map. Double click again to return the board
+                      game back.
+                    </p>
+
+                    <p>
+                      C) Player who selected <b>0 provides Latitude</b> and the
                       opponent with <b> 1 provides Longitude</b>. These are the
                       geographical coordinates for map. On any move of each
                       player, the value of each column is changed, and

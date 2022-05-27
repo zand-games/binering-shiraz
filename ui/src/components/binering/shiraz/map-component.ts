@@ -57,6 +57,21 @@ export class MapComponent extends LitElement {
           top: 0px;
           z-index: 1;
         }
+        .data {
+          position: fixed;
+          top: 30px;
+          left: 130px;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
+          z-index: 501;
+          font-size: 0.6em;
+          font-family: 'courier', 'sans-serif', 'Serif';
+        }
+        .data a {
+          text-decoration: none;
+        }
       `,
     ];
   }
@@ -71,6 +86,14 @@ export class MapComponent extends LitElement {
   render() {
     return html`
       <button @click="${this.download}">Download</button>
+      <div class="data nonselectable">
+        <a
+          class="location"
+          target="_blank"
+          href="${this.game.value.goole_map_current_location}"
+          >Last location on google map!
+        </a>
+      </div>
       <div class="canvasContainer">
         <canvas id="map" class="contextCanvas"></canvas>
       </div>

@@ -58,14 +58,6 @@ export class BoardComponent extends LitElement {
           </button>
         </div>
         <playertype-component class="nonselectable"></playertype-component>
-        <div class="data nonselectable">
-          <a
-            class="location"
-            target="_blank"
-            href="${this.game.value.goole_map_current_location}"
-            >Last location on google map!
-          </a>
-        </div>
         <div
           class="container ${this.game.value.game_finished == true ||
           this.game.value.round_finished
