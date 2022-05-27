@@ -63,8 +63,8 @@ export class BoardComponent extends LitElement {
             class="location"
             target="_blank"
             href="${this.game.value.goole_map_current_location}"
-            >You here! on the map</a
-          >
+            >Last location on google map!
+          </a>
         </div>
         <div
           class="container ${this.game.value.game_finished == true ||

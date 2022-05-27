@@ -39,7 +39,23 @@ export class MapComponent extends LitElement {
           user-select: none; /* Standard */
           z-index: 500;
         }
-        .nonselectable {
+        .canvasContainer {
+          position: fixed;
+          left: 0px;
+          right: 0px;
+          top: 0;
+          bottom: 0;
+          z-index: 1;
+          background-color: Black;
+        }
+
+        .contextCanvas {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0px;
+          top: 0px;
+          z-index: 1;
         }
       `,
     ];
@@ -50,19 +66,20 @@ export class MapComponent extends LitElement {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
     this.draw();
-    //this.plotPosition();
   }
 
   render() {
     return html`
       <button @click="${this.download}">Download</button>
-      <div id="container">
-        <canvas id="map" class="canvs"></canvas>
-        ${this.add_new_location(
-          this.game.value.latitute,
-          this.game.value.longtitude
-        )}
+      <div class="canvasContainer">
+        <canvas id="map" class="contextCanvas"></canvas>
       </div>
+
+      ${this.add_new_location(
+        this.game.value.latitute,
+        this.game.value.longtitude
+      )}
+      <div id="container"></div>
     `;
   }
 
