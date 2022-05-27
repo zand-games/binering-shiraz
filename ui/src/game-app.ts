@@ -46,6 +46,7 @@ export class GameApp extends LitElement {
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      z-index: 300;
 
       background-color: rgb(154 181 3 / 100%);
     }

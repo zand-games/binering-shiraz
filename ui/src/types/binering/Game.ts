@@ -26,6 +26,24 @@ export class Game {
   constructor() {
     this.startNewGame();
   }
+
+  public get latitute() {
+    if (this.players[1].isLatitute) {
+      return this.players[1].get_location();
+    } else {
+      return this.players[2].get_location();
+    }
+    return '0';
+  }
+
+  public get longtitude() {
+    if (this.players[1].isLatitute) {
+      return this.players[2].get_location();
+    } else {
+      return this.players[1].get_location();
+    }
+  }
+
   public ResumeGame(game_hash: String) {
     // fetch game from DHT
   }
@@ -52,6 +70,7 @@ export class Game {
       await this.onRemoveCardEventHandler(data, this);
     };
     this.players = { 1: this.player1, 2: this.player2 };
+    this.coordination = this.latitute + ',' + this.longtitude;
     find_location(this);
   }
 

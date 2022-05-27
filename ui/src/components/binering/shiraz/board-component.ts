@@ -7,10 +7,28 @@ import { Game } from '../../../types/binering/Game';
 import { derived, Writable } from 'svelte/store';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import './playertype-component';
+import './map-component';
 @customElement('board-component')
 export class BoardComponent extends LitElement {
   game = new StoreSubscriber(this, () => GameStore);
+  firstUpdated() {
+    var map = this.shadowRoot!.getElementById('map');
 
+    map?.addEventListener('dblclick', event => {
+      console.log('Double-click detected');
+      var section = this.shadowRoot!.getElementById('gamesection');
+
+      if (section?.classList.contains('showgame')) {
+        section.classList.remove('showgame');
+        section.classList.add('hidegame');
+      } else {
+        section?.classList.remove('hidegame');
+        section?.classList.add('showgame');
+      }
+
+      // Double-click detected
+    });
+  }
   async play_again() {
     if (this.game.value.game_finished) await this.game.value.startNewGame();
     else await this.game.value.startNewRound();
@@ -19,59 +37,65 @@ export class BoardComponent extends LitElement {
       return val;
     });
   }
+  @state()
+  show_map: boolean = true;
 
   render() {
     return html`
-      <div
-        class="${this.game.value.game_finished == true ||
-        this.game.value.round_finished == true
-          ? 'show'
-          : 'hide'}"
-      >
-        <h4>${this.game.value.looser!}</h4>
-        <button @click=${this.play_again}>
-          ${this.game.value.game_finished
-            ? 'Play new game!'
-            : 'Play new round!'}
-        </button>
-      </div>
-      <playertype-component></playertype-component>
-      <div class="data">
-        <a
-          class="location"
-          target="_blank"
-          href="${this.game.value.locationUrl}"
-          >${this.game.value.location}</a
+      <map-component
+        id="map"
+        .userId=${this.game.value.coordination}
+      ></map-component>
+      <secion id="gamesection">
+        <div
+          class="${this.game.value.game_finished == true ||
+          this.game.value.round_finished == true
+            ? 'show'
+            : 'hide'}"
         >
-      </div>
-      <div
-        class="container ${this.game.value.game_finished == true ||
-        this.game.value.round_finished
-          ? 'gamedisabled'
-          : ''}"
-      >
-        <div>
-          <section-component .playerId=${1}></section-component>
+          <h4>${this.game.value.looser!}</h4>
+          <button @click=${this.play_again}>
+            ${this.game.value.game_finished
+              ? 'Play new game!'
+              : 'Play new round!'}
+          </button>
         </div>
-        <div>
-          <section-component .playerId=${2}></section-component>
+        <playertype-component></playertype-component>
+        <div class="data">
+          <a
+            class="location"
+            target="_blank"
+            href="${this.game.value.locationUrl}"
+            >${this.game.value.location}</a
+          >
         </div>
-      </div>
-
-      <div id="bg">
-        <iframe
-          width="1080"
-          height="1080"
-          id="gmap_canvas"
-          src="https://maps.google.com/maps?q=${this.game.value
-            .coordination}&t=&z=3&ie=UTF8&iwloc=&output=embed"
-          frameborder="0"
-          scrolling="no"
-          marginheight="0"
-          marginwidth="0"
-        ></iframe>
-      </div>
+        <div
+          class="container ${this.game.value.game_finished == true ||
+          this.game.value.round_finished
+            ? 'gamedisabled'
+            : ''}"
+        >
+          <div>
+            <section-component .playerId=${1}></section-component>
+          </div>
+          <div>
+            <section-component .playerId=${2}></section-component>
+          </div>
+        </div>
+      </secion>
     `;
+  }
+  show_map_click() {
+    // this.show_map = !this.show_map;
+    // // console.log(this.show_map);
+    // var iframe = this.shadowRoot?.querySelector(
+    //   '#gmap_canvas'
+    // ) as HTMLIFrameElement;
+    // if (this.show_map) {
+    //   iframe.style.visibility = 'visible';
+    // } else {
+    //   iframe.style.visibility = 'hidden';
+    // }
   }
   connectedCallback() {
     super.connectedCallback();
@@ -139,11 +163,32 @@ export class BoardComponent extends LitElement {
           padding: 0.4em;
           overflow: auto;
           border-radius: 12px;
+          opacity: 0.8;
         }
 
         .location {
           text-decoration: none;
           color: whitesmoke;
+        }
+        .showmap {
+          font-size: 0.7em;
+          font-family: 'courier', 'sans-serif', 'Serif';
+          margin-top: -50px;
+        }
+
+        .hidegame {
+          //visibility: visible;
+          display: none;
+        }
+        .showgame {
+          //visibility: hidden;
+          display: inline;
+        }
+        .nonselectable {
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
         }
       `,
     ];
