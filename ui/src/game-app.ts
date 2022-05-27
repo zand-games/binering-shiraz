@@ -14,18 +14,17 @@ export class GameApp extends LitElement {
   render() {
     return html`
       <main>
-        <h1>
+        <h1 class="nonselectable">
           <a class="title" href="https://zand.games">Shiraz Game</a>
           <help-component></help-component>
         </h1>
         <board-component></board-component>
-        <footer>
+        <footer class="nonselectable">
           <h6>
-            <a class="title" target="_blank" href="https://zand.games"
-              >Zand.Games</a
-            >
-
             © 2022
+            <a class="footerlink" target="_blank" href="https://zand.games"
+              >Zand.Games</a
+            >, All rights reserved
           </h6>
         </footer>
       </main>
@@ -33,6 +32,10 @@ export class GameApp extends LitElement {
   }
 
   static styles = css`
+    .footerlink {
+      color: white;
+      text-decoration: none;
+    }
     .title {
       text-decoration: none;
     }
@@ -47,8 +50,8 @@ export class GameApp extends LitElement {
       margin-left: auto;
       margin-right: auto;
       z-index: 300;
-
-      background-color: rgb(154 181 3 / 100%);
+      opacity: 0.5;
+      /* background-color: rgb(154 181 3 / 100%); */
     }
 
     :host {
@@ -71,20 +74,28 @@ export class GameApp extends LitElement {
       text-shadow: 2px 2px 5px white;
     }
     h6 {
-      padding: 10px;
+      padding-top: 10px;
       margin: 0;
+      color: white;
     }
     main {
       flex-grow: 1;
     }
 
     .app-footer {
-      font-size: calc(12px + 0.5vmin);
+      font-size: 0.6em;
       align-items: center;
+      opacity: 0.5;
     }
 
     .app-footer a {
       margin-left: 5px;
+    }
+    .nonselectable {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* IE10+/Edge */
+      user-select: none; /* Standard */
     }
   `;
 }

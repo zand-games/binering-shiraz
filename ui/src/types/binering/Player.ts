@@ -206,6 +206,9 @@ export class Player {
     var result = parseCardInfo(data);
     if (result?.dataIsValid == false) return;
 
+    // it is not my turn to move
+    if (this.turn == false) return;
+
     var dec = this.decks.find(i => i.id == result?.deckId);
     dec?.removeSimilarCardsFromLastPosition();
 

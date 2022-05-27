@@ -49,12 +49,12 @@ export async function find_location(game: Game) {
   var bdcApi: string = bdcApi + '?latitude=' + lat + '&longitude=' + long;
   +'&localityLanguage=en';
   //console.log('api:' + bdcApi);
-  var location = await getApi(bdcApi);
+  // var location = await getApi(bdcApi);
   //get_wiki_location(lat, long);
   google = google + lat + ',' + long;
 
   GameStore.update(val => {
-    val.location = location;
+    //val.location = location;
     val.locationUrl = google;
     val.coordination = lat + ',' + long;
     return val;

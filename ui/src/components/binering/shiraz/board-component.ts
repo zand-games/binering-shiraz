@@ -60,13 +60,13 @@ export class BoardComponent extends LitElement {
               : 'Play new round!'}
           </button>
         </div>
-        <playertype-component></playertype-component>
-        <div class="data">
+        <playertype-component class="nonselectable"></playertype-component>
+        <div class="data nonselectable">
           <a
             class="location"
             target="_blank"
             href="${this.game.value.locationUrl}"
-            >${this.game.value.location}</a
+            >You here! on the map</a
           >
         </div>
         <div
@@ -76,10 +76,16 @@ export class BoardComponent extends LitElement {
             : ''}"
         >
           <div>
-            <section-component .playerId=${1}></section-component>
+            <section-component
+              class="nonselectable"
+              .playerId=${1}
+            ></section-component>
           </div>
           <div>
-            <section-component .playerId=${2}></section-component>
+            <section-component
+              class="nonselectable"
+              .playerId=${2}
+            ></section-component>
           </div>
         </div>
       </secion>

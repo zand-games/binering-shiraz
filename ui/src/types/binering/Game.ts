@@ -180,6 +180,8 @@ export class Game {
     const source_card = parseCardInfo(input);
     if (source_card.dataIsValid == false) return;
 
+    // it is not your turn to play
+    if (this.players[source_card.playerId!].turn == false) return;
     if (source_card.playerId == target_player) {
       //internal move
       this.players[target_player]

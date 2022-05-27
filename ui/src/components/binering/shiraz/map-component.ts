@@ -305,38 +305,89 @@ export class MapComponent extends LitElement {
       img.src = data;
       img.width = 18;
       img.height = 28;
+
       this.locations.forEach((item, index) => {
         var latitude: any = item.split(',')[0];
         var longitude: any = item.split(',')[1];
 
         var XPos = this.degreesOfLongitudeToScreenX(longitude);
         var YPos = this.degreesOfLatitudeToScreenY(latitude);
-        if (img.complete) {
-          ctx.drawImage(img, XPos, YPos, img.width, img.height);
-        } else {
-          img.onload = function () {
-            ctx.drawImage(img, XPos, YPos, img.width, img.height);
-          };
-        }
         // Point style
         ctx.fillStyle = 'green';
-        ctx.fill();
-        ctx.lineWidth = 3;
+        //ctx.fill();
         ctx.strokeStyle = 'black';
+
+        if (index == 0) {
+          //draw circle
+          ctx.beginPath();
+
+          ctx.arc(XPos, YPos, 5, 0, 3 * Math.PI, false);
+          ctx.fill();
+        } else {
+          // icon
+          if (img.complete) {
+            ctx.drawImage(img, XPos, YPos, img.width, img.height);
+          } else {
+            img.onload = function () {
+              ctx.drawImage(img, XPos, YPos, img.width, img.height);
+            };
+          }
+        }
+
         //ctx. = "hellow";
-        ctx.fillText(
-          (index + 1).toString(),
-          this.degreesOfLongitudeToScreenX(longitude) + 15,
-          this.degreesOfLatitudeToScreenY(latitude) + 20,
-          200,
-          100
-        );
+        ctx.fillText((index + 1).toString(), XPos + 15, YPos + 20, 200, 100);
+
+        // if (index == 0) ctx.moveTo(XPos, YPos);
+        // else {
+        //   ctx.lineWidth = 1;
+        //   ctx.strokeStyle = 'rgb(158, 151, 151)';
+        //   ctx.lineTo(XPos + 13, YPos + 17);
+        // }
+
+        if (index != 0 && this.locations.length > 1) {
+          var pre_item = this.locations[index - 1];
+          var pre_latitude: any = pre_item.split(',')[0];
+          var pre_longitude: any = pre_item.split(',')[1];
+
+          var pre_XPos = this.degreesOfLongitudeToScreenX(pre_longitude);
+          var pre_YPos = this.degreesOfLatitudeToScreenY(pre_latitude);
+          this.canvas_arrow(ctx, pre_XPos, pre_YPos, XPos, YPos);
+        }
       });
 
       ctx.stroke();
     }
   }
+  canvas_arrow(ctx: any, fromx: any, fromy: any, tox: any, toy: any) {
+    ctx.beginPath();
 
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgb(158, 151, 151)';
+
+    var headlen = 10; // length of head in pixels
+    var dx = tox - fromx;
+    var dy = toy - fromy;
+    var angle = Math.atan2(dy, dx);
+    ctx.moveTo(fromx, fromy);
+    ctx.lineTo(tox, toy);
+    ctx.lineTo(
+      tox - headlen * Math.cos(angle - Math.PI / 6),
+      toy - headlen * Math.sin(angle - Math.PI / 6)
+    );
+
+    ctx.moveTo(tox, toy);
+
+    ctx.lineTo(
+      tox - headlen * Math.cos(angle + Math.PI / 6),
+      toy - headlen * Math.sin(angle + Math.PI / 6)
+    );
+
+    // ctx.beginPath();
+    // ctx.moveTo(start,start2);
+    // ctx.lineTo(finish,finish2);
+    // ctx.stroke();
+    // ctx.closePath();
+  }
   draw() {
     // Main entry point got the map canvas example
     if (this.shadowRoot == undefined) return;
