@@ -8,7 +8,6 @@ import { Player } from '../../../types/binering/Player';
 import { tsGenerator } from '@type-craft/content';
 import { Game } from '../../../types/binering/Game';
 import { StoreSubscriber } from 'lit-svelte-stores';
-import { find_location } from '../../../types/utils';
 import { until } from 'lit/directives/until.js';
 
 @customElement('trash-component')

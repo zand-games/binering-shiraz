@@ -2,20 +2,17 @@ import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { customElement, property, state } from 'lit/decorators.js';
 import { GameStore } from '../store';
-interface coordination {
-  lat: string;
-  long: string;
-}
+import { Coordination } from '../../../types/binering/Game';
+
 @customElement('map-component')
 export class MapComponent extends LitElement {
   game = new StoreSubscriber(this, () => {
     return GameStore;
   });
 
-  locations: Array<string> = [];
-
-  @property({ type: String }) set coordination(coord: string) {
-    if (this.locations.indexOf(coord) === -1) this.locations.push(coord);
+  locations: Array<Coordination> = [];
+  @property({ type: Array }) set coordination(coord: Array<Coordination>) {
+    this.locations = coord;
   }
 
   static get styles() {
@@ -122,6 +119,12 @@ export class MapComponent extends LitElement {
   }
 
   drawLongitudeLines(ctx: any, iDEGREES_BETWEEN_GRID_LINES: any) {
+    ctx.beginPath();
+    ctx.lineWidth = 0.07;
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.setLineDash([10]);
+
     var iNORTH_LATITUDE = 90,
       iSOUTH_LATITUDE = -90,
       iDegreesScreenY = 0,
@@ -136,11 +139,11 @@ export class MapComponent extends LitElement {
       // Convert the latitude value and move the pen to the start of the line
       iDegreesScreenY = this.degreesOfLatitudeToScreenY(iLineOfLatitude);
       ctx.moveTo(this.iMAP_START_X_POS, iDegreesScreenY);
-
       // Plot the line
       ctx.lineTo(this.iMAP_START_X_POS + this.iMAP_WIDTH, iDegreesScreenY);
 
       // Put the label on the line
+
       ctx.fillText(
         iLineOfLatitude,
         this.iCANVAS_START_X_POS + 5,
@@ -148,6 +151,7 @@ export class MapComponent extends LitElement {
       );
 
       ctx.stroke();
+      ctx.closePath();
     }
   }
 
@@ -184,6 +188,12 @@ export class MapComponent extends LitElement {
   }
 
   drawLatitudeLines(ctx: any, iDEGREES_BETWEEN_GRID_LINES: any) {
+    ctx.beginPath();
+    ctx.lineWidth = 0.05;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.fillStyle = 'white'; //'rgb(255,255,255)';
+    ctx.setLineDash([10]);
+
     var iMIN_LONGITUDE = -180,
       iMAX_LONGITUDE = 180,
       iDegreesScreenY = 0,
@@ -205,7 +215,7 @@ export class MapComponent extends LitElement {
 
       ctx.moveTo(iDegreesScreenX, this.iMAP_START_Y_POS);
 
-      // Plot the line
+      // Plot the line // Vertical Line
       ctx.lineTo(iDegreesScreenX, this.iMAP_START_Y_POS + this.iMAP_HEIGHT);
 
       // Put the label on the line
@@ -216,6 +226,7 @@ export class MapComponent extends LitElement {
       );
 
       ctx.stroke();
+      ctx.closePath();
     }
   }
 
@@ -281,8 +292,6 @@ export class MapComponent extends LitElement {
 
   plotPosition() {
     // Grab a handle to the canvas
-    //    debugger;
-
     var canvas = this.shadowRoot?.getElementById('map') as HTMLCanvasElement;
     var ctx: any; //= canvas.getContext('2d');
     if (!canvas) return;
@@ -290,8 +299,10 @@ export class MapComponent extends LitElement {
     if (canvas.getContext) {
       // Grab the context
       ctx = canvas.getContext('2d');
-      debugger;
+      //debugger;
       if (this.locations == undefined || this.locations.length == 0) return;
+
+      ctx.setLineDash([]);
 
       this.draw_start(ctx, this.get_XPos(0), this.get_YPos(0));
       if (this.locations.length == 1) return;
@@ -341,11 +352,11 @@ export class MapComponent extends LitElement {
   }
 
   get_XPos(index: number) {
-    var longitude: any = this.locations[index].split(',')[1];
+    var longitude: any = this.locations[index].longitude;
     return this.degreesOfLongitudeToScreenX(longitude);
   }
   get_YPos(index: number) {
-    var latitude: any = this.locations[index].split(',')[0];
+    var latitude: any = this.locations[index].latitude;
     return this.degreesOfLatitudeToScreenY(latitude);
   }
   draw_here(ctx: any, x: any, y: any) {
@@ -432,9 +443,6 @@ export class MapComponent extends LitElement {
 
     ctx.stroke();
     ctx.closePath();
-    // ctx.beginPath();
-    // ctx.moveTo(start,start2);
-    // ctx.lineTo(finish,finish2);
   }
   draw() {
     // Main entry point got the map canvas example

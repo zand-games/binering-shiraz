@@ -29,7 +29,7 @@ export function messageBox(val: string) {
   document.dispatchEvent(new CustomEvent('msg-event', { detail: val }));
 }
 
-export async function find_location(game: Game) {
+export async function find_location_old(game: Game) {
   var bdcApi: string =
     'https://api.bigdatacloud.net/data/reverse-geocode-client';
 

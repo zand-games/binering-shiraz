@@ -1,6 +1,6 @@
 import { MoveEventInfo, Player } from './Player';
 import { Color } from './Trash';
-import { find_location, parseCardInfo } from '../utils';
+import { parseCardInfo } from '../utils';
 import { HtmlTagHydration } from 'svelte/internal';
 import { ComputerPlayer } from './ComputerPlay';
 export enum PlayeType {
@@ -10,6 +10,10 @@ export enum PlayeType {
 interface Round {
   round_looserid: number;
   score: number;
+}
+export interface Coordination {
+  latitude: string;
+  longitude: string;
 }
 export class Game {
   public players: Record<number, Player> = {};
@@ -23,10 +27,19 @@ export class Game {
   public location: string = 'Shiraz, Iran';
   public coordination: string = 'Shiraz, Iran';
   public locationUrl: string = '';
+  public locations: Array<Coordination> = [];
   constructor() {
     this.startNewGame();
   }
 
+  public get goole_map_current_location() {
+    return (
+      'http://maps.google.com/maps?z=20&q=' +
+      this.latitute +
+      ',' +
+      this.longtitude
+    );
+  }
   public get latitute() {
     if (this.players[1].isLatitute) {
       return this.players[1].get_location();
@@ -71,7 +84,11 @@ export class Game {
     };
     this.players = { 1: this.player1, 2: this.player2 };
     this.coordination = this.latitute + ',' + this.longtitude;
-    find_location(this);
+    this.locations = [];
+    this.locations.push({
+      latitude: this.latitute,
+      longitude: this.longtitude,
+    });
   }
 
   public async startNewRound() {
@@ -84,6 +101,12 @@ export class Game {
 
     if (this.rounds.length % 2 == 0) this.changeTurn(2);
     else this.changeTurn(1);
+
+    this.locations = [];
+    this.locations.push({
+      latitude: this.latitute,
+      longitude: this.longtitude,
+    });
   }
   private async onRemoveCardEventHandler(
     data: MoveEventInfo,
@@ -97,7 +120,11 @@ export class Game {
     if (oponent.trash?.selectedCard == Color.NotSelected) {
       oponent.trash.setColor(!data.playedCard);
     }
-    find_location(this);
+    // find_location(this);
+    this.locations.push({
+      latitude: this.latitute,
+      longitude: this.longtitude,
+    });
   }
   private calc_score(winner: Player, looser: Player) {
     var count = 0;
@@ -197,8 +224,11 @@ export class Game {
         .getDeck(source_card.deckId!)
         ?.cards.pop();
     }
-    find_location(this);
 
+    this.locations.push({
+      latitude: this.latitute,
+      longitude: this.longtitude,
+    });
     await this.changeTurn();
   }
 }

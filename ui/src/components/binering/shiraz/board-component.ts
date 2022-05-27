@@ -15,7 +15,6 @@ export class BoardComponent extends LitElement {
     var map = this.shadowRoot!.getElementById('map');
 
     map?.addEventListener('dblclick', event => {
-      console.log('Double-click detected');
       var section = this.shadowRoot!.getElementById('gamesection');
 
       if (section?.classList.contains('showgame')) {
@@ -25,8 +24,6 @@ export class BoardComponent extends LitElement {
         section?.classList.remove('hidegame');
         section?.classList.add('showgame');
       }
-
-      // Double-click detected
     });
   }
   async play_again() {
@@ -44,7 +41,7 @@ export class BoardComponent extends LitElement {
     return html`
       <map-component
         id="map"
-        .coordination=${this.game.value.coordination}
+        .coordination=${this.game.value.locations}
       ></map-component>
       <secion id="gamesection" class="nonselectable">
         <div
@@ -65,7 +62,7 @@ export class BoardComponent extends LitElement {
           <a
             class="location"
             target="_blank"
-            href="${this.game.value.locationUrl}"
+            href="${this.game.value.goole_map_current_location}"
             >You here! on the map</a
           >
         </div>
