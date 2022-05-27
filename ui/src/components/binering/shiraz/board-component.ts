@@ -44,9 +44,9 @@ export class BoardComponent extends LitElement {
     return html`
       <map-component
         id="map"
-        .userId=${this.game.value.coordination}
+        .coordination=${this.game.value.coordination}
       ></map-component>
-      <secion id="gamesection">
+      <secion id="gamesection" class="nonselectable">
         <div
           class="${this.game.value.game_finished == true ||
           this.game.value.round_finished == true
@@ -91,18 +91,7 @@ export class BoardComponent extends LitElement {
       </secion>
     `;
   }
-  show_map_click() {
-    // this.show_map = !this.show_map;
-    // // console.log(this.show_map);
-    // var iframe = this.shadowRoot?.querySelector(
-    //   '#gmap_canvas'
-    // ) as HTMLIFrameElement;
-    // if (this.show_map) {
-    //   iframe.style.visibility = 'visible';
-    // } else {
-    //   iframe.style.visibility = 'hidden';
-    // }
-  }
+  show_map_click() {}
   connectedCallback() {
     super.connectedCallback();
   }
