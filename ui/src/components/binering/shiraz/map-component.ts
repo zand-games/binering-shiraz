@@ -29,6 +29,18 @@ export class MapComponent extends LitElement {
           flex-direction: column;
           overflow: scroll;
         }
+        button {
+          position: fixed;
+          top: 30px;
+          left: 30px;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
+          z-index: 500;
+        }
+        .nonselectable {
+        }
       `,
     ];
   }
@@ -40,8 +52,10 @@ export class MapComponent extends LitElement {
     this.draw();
     //this.plotPosition();
   }
+
   render() {
     return html`
+      <button @click="${this.download}">Download</button>
       <div id="container">
         <canvas id="map" class="canvs"></canvas>
         ${this.add_new_location(
@@ -65,6 +79,16 @@ export class MapComponent extends LitElement {
   add_new_location(lat: string, long: string) {
     //this.plotPosition();
     this.draw();
+  }
+
+  download() {
+    var canvas = this.shadowRoot?.getElementById('map') as HTMLCanvasElement;
+    if (!canvas) return;
+    var img = canvas.toDataURL('image/png');
+    var link = document.createElement('a');
+    link.download = 'shiraz-game.png';
+    link.href = img;
+    link.click();
   }
   drawBackground(ctx: any) {
     // Black background
