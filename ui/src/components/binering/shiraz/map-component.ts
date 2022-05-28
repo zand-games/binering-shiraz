@@ -18,21 +18,20 @@ export class MapComponent extends LitElement {
   static get styles() {
     return [
       css`
-        .canvs {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: -2000;
-          font-size: 1rem;
-          flex-direction: column;
-          overflow: scroll;
-        }
-        button {
+        #btndownload {
           position: fixed;
           top: 30px;
           left: 30px;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE10+/Edge */
+          user-select: none; /* Standard */
+          z-index: 500;
+        }
+        #btnshowboard {
+          position: fixed;
+          top: 30px;
+          left: 160px;
           -webkit-user-select: none; /* Safari */
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */
@@ -60,14 +59,14 @@ export class MapComponent extends LitElement {
         .data {
           position: fixed;
           top: 30px;
-          left: 130px;
+          right: 50px;
           -webkit-user-select: none; /* Safari */
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* IE10+/Edge */
           user-select: none; /* Standard */
           z-index: 501;
-          font-size: 0.6em;
-          font-family: 'courier', 'sans-serif', 'Serif';
+          font-size: 0.5em;
+          font-family: 'sans-serif', 'Serif';
         }
         .data a {
           text-decoration: none;
@@ -82,10 +81,23 @@ export class MapComponent extends LitElement {
     canvas.width = window.innerWidth;
     this.draw();
   }
-
+  @property()
+  show_board_game: boolean = true;
+  show_hide_board_game() {
+    this.show_board_game = !this.show_board_game;
+    const event = new CustomEvent('boardStatus', {
+      detail: {
+        status: this.show_board_game,
+      },
+    });
+    this.dispatchEvent(event);
+  }
   render() {
     return html`
-      <button @click="${this.download}">Download</button>
+      <button id="btnshowboard" @click="${this.show_hide_board_game}">
+        ${this.show_board_game ? 'Hide Board' : 'Show Board'}
+      </button>
+      <button id="btndownload" @click="${this.download}">Download Map</button>
       <div class="data nonselectable">
         <a
           class="location"
@@ -102,7 +114,6 @@ export class MapComponent extends LitElement {
         this.game.value.latitute,
         this.game.value.longtitude
       )}
-      <div id="container"></div>
     `;
   }
 

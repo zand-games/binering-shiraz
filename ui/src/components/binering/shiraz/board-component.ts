@@ -14,17 +14,7 @@ export class BoardComponent extends LitElement {
   firstUpdated() {
     var map = this.shadowRoot!.getElementById('map');
 
-    map?.addEventListener('dblclick', event => {
-      var section = this.shadowRoot!.getElementById('gamesection');
-
-      if (section?.classList.contains('showgame')) {
-        section.classList.remove('showgame');
-        section.classList.add('hidegame');
-      } else {
-        section?.classList.remove('hidegame');
-        section?.classList.add('showgame');
-      }
-    });
+    map?.addEventListener('dblclick', event => {});
   }
   async play_again() {
     if (this.game.value.game_finished) await this.game.value.startNewGame();
@@ -36,10 +26,21 @@ export class BoardComponent extends LitElement {
   }
   @state()
   show_map: boolean = true;
-
+  show_hide_board(e: any) {
+    var section = this.shadowRoot!.getElementById('gamesection');
+    debugger;
+    if (Boolean(e.detail.status) == false) {
+      section?.classList.remove('showgame');
+      section?.classList.add('hidegame');
+    } else {
+      section?.classList.remove('hidegame');
+      section?.classList.add('showgame');
+    }
+  }
   render() {
     return html`
       <map-component
+        @boardStatus=${this.show_hide_board}
         id="map"
         .coordination=${this.game.value.locations}
       ></map-component>
