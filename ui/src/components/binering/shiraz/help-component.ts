@@ -151,7 +151,7 @@ export class HelpComponent extends LitElement {
       >
       <a
         class="nonselectable"
-        href="https://www.youtube.com/watch?v=6YDaJpGEzg4"
+        href="https://www.youtube.com/watch?v=leumxn49TTI"
         target="_blank"
       >
         <img
