@@ -1,3 +1,13 @@
-# Shiraz Binary Card Game Source Code
+# Shiraz Binary Card Game
 
-The source code written in Typescript is in UI folder.
+## Typescript
+
+You need `node version v18.16.0`
+
+1- Clone the repository
+
+2- `npm i`
+
+3- `npm start`
+
+### Holochain part is removed for now and the project structure cleaned up.
