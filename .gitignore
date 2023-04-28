@@ -1,11 +1,24 @@
-node_modules/
+## editors
+/.idea
+/.vscode
+
+## system files
+.DS_Store
+
+## npm
+/node_modules/
+/npm-debug.log
+
+## testing
+/coverage/
+
+## temp folders
+/.tmp/
+
+# build
+/_site/
 /dist/
-/target/
-/.cargo/
-*.happ
-*.webhapp
-*.zip
-*.dna
-.hc*
-.hc
-.running
+/out-tsc/
+
+storybook-static
+.rollup.cache
