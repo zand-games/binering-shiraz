@@ -11,3 +11,6 @@ You need `node version v18.16.0`
 3- `npm start`
 
 ### Holochain part is removed for now and the project structure cleaned up.
+
+### Play the game from here:
+https://zand-games.github.io/binaring/shiraz/index.html
