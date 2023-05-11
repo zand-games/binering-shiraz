@@ -44,16 +44,20 @@ export class CardComponent extends LitElement {
   async doubleClick(e: any) {
     if (this.game.value.players[this.playerId!].isComputer == true) return;
 
-    if (
-      !(await ComputerPlayer.fill_empty_deck(
-        this.game.value.players[this.playerId!],
-        this.game.value
-      ))
-    ) {
-      await this.game.value.players[this.playerId!].remove_card(
-        e.target.getAttribute('card-data')
-      );
-    }
+    // if (
+    //   !(await ComputerPlayer.fill_empty_deck(
+    //     this.game.value.players[this.playerId!],
+    //     this.game.value
+    //   ))
+    // ) {
+    //   await this.game.value.players[this.playerId!].remove_card(
+    //     e.target.getAttribute('card-data')
+    //   );
+    // }
+
+    await this.game.value.players[this.playerId!].remove_card(
+      e.target.getAttribute('card-data')
+    );
     GameStore.update(val => {
       val = this.game.value;
       return val;

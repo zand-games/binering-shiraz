@@ -101,13 +101,16 @@ export class Player {
   }
   public can_Card_Transfer_To_Oponent(): boolean {
     if (this.trash!.selectedCard == Color.NotSelected) return false;
+    // Always you can attack
+    return true;
     // Deck Can not Be empty
-    if (this.isThereEmptyDeck()) {
-      return false;
-    }
-    return this.decks.every(
-      dec => dec.cards[dec.cards.length - 1] != this.trash?.value
-    );
+    // if (this.isThereEmptyDeck()) {
+    //   return false;
+    // }
+    // If there is not possible card to remove
+    // return this.decks.every(
+    //   dec => dec.cards[dec.cards.length - 1] != this.trash?.value
+    // );
   }
   shuffle(array: boolean[]) {
     let currentIndex = array.length,
@@ -226,7 +229,7 @@ export class Player {
     if (this.id != result.playerId) return false;
 
     // Deck Can not Be empty
-    if (this.isThereEmptyDeck() && this.remainedCard() > 3) return false;
+    // if (this.isThereEmptyDeck() && this.remainedCard() > 3) return false;
 
     if (this.trash!.selectedCard == Color.NotSelected) {
       // this color type is not selected so far

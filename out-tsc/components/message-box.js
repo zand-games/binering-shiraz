@@ -1,42 +1,38 @@
+import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
-import { state, customElement, property } from 'lit/decorators.js';
-
-@customElement('msg-component')
-export class Messagebox extends LitElement {
-  private msgBox = document.getElementById('msg');
-  private container = document.getElementById('container');
-
-  @property()
-  message?: string;
-
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener('msg-event', e => {
-      this.message = 'hi there';
-      this.requestUpdate();
-    });
-  }
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener('msg-event', this.showMessage);
-  }
-  showMessage(e: any) {
-    // // var div = document.getElementById('msg');
-    // // // ✅ Change (replace) the text of the element
-
-    // // div!.innerHTML = e.detail;
-    this.message = e.detail;
-    //console.log(this.message);
-    var self = this;
-    this.requestUpdate();
-
-    //this.container?.classList.remove('hide');
-    setInterval(function () {
-      //self.container?.classList.add('hide');
-    }, 2000);
-  }
-  render() {
-    return html`<div id="container " class="container hide">
+import { customElement, property } from 'lit/decorators.js';
+let Messagebox = class Messagebox extends LitElement {
+    constructor() {
+        super(...arguments);
+        this.msgBox = document.getElementById('msg');
+        this.container = document.getElementById('container');
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('msg-event', e => {
+            this.message = 'hi there';
+            this.requestUpdate();
+        });
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        document.removeEventListener('msg-event', this.showMessage);
+    }
+    showMessage(e) {
+        // // var div = document.getElementById('msg');
+        // // // ✅ Change (replace) the text of the element
+        // // div!.innerHTML = e.detail;
+        this.message = e.detail;
+        //console.log(this.message);
+        var self = this;
+        this.requestUpdate();
+        //this.container?.classList.remove('hide');
+        setInterval(function () {
+            //self.container?.classList.add('hide');
+        }, 2000);
+    }
+    render() {
+        return html `<div id="container " class="container hide">
       <!-- <div class="arrow">
         <div class="outer"></div>
         <div class="inner"></div>
@@ -45,10 +41,10 @@ export class Messagebox extends LitElement {
         <p id="msg">${this.message}</p>
       </div>
     </div>`;
-  }
-  static get styles() {
-    return [
-      css`
+    }
+    static get styles() {
+        return [
+            css `
         .hide {
           display: none;
         }
@@ -129,6 +125,14 @@ export class Messagebox extends LitElement {
           margin: 0;
         }
       `,
-    ];
-  }
-}
+        ];
+    }
+};
+__decorate([
+    property()
+], Messagebox.prototype, "message", void 0);
+Messagebox = __decorate([
+    customElement('msg-component')
+], Messagebox);
+export { Messagebox };
+//# sourceMappingURL=message-box.js.map

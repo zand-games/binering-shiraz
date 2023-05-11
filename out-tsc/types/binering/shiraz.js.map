@@ -1,0 +1,1 @@
+{"version":3,"file":"shiraz.js","sourceRoot":"","sources":["../../../src/types/binering/shiraz.ts"],"names":[],"mappings":"","sourcesContent":["export interface Game {\n  title: string;\n  content: string;\n}"]}
