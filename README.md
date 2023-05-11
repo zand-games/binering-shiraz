@@ -14,3 +14,5 @@ You need `node version v18.16.0`
 
 ### Play the game from here:
 https://zand-games.github.io/binaring/shiraz/index.html
+
+![image](https://github.com/zand-games/binering-shiraz/assets/19893971/8e808a31-0105-4b87-ba34-482046ca3b90)
