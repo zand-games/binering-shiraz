@@ -24,7 +24,7 @@ export class GameApp extends LitElement {
             © 2022
             <a class="footerlink" target="_blank" href="https://zand.games"
               >Zand.Games</a
-            >, All rights reserved
+            >
           </h6>
         </footer>
       </main>
