@@ -1,9 +1,13 @@
 import { parseCardInfo } from '../utils';
 export class Deck {
     constructor(playerId, deckId, cards) {
+        this.cards = [];
         this.playerId = playerId;
         this.id = deckId;
         this.cards = cards;
+    }
+    getCards() {
+        return this.cards;
     }
     getDecimal() {
         // var a = [false, true, false, true];

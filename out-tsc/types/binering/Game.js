@@ -179,8 +179,10 @@ export class Game {
             throw new Error('PlayerId is invalid!');
     }
     async transfer_card(input, target_player, target_deck) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e;
+        debugger;
         const source_card = parseCardInfo(input);
+        console.log(source_card);
         if (source_card.dataIsValid == false)
             return;
         // it is not your turn to play
@@ -194,16 +196,28 @@ export class Game {
         }
         else {
             // moved from oponent
-            (_c = this.players[target_player]
-                .getDeck(target_deck)) === null || _c === void 0 ? void 0 : _c.cards.unshift(source_card.value);
-            (_d = this.players[source_card.playerId]
-                .getDeck(source_card.deckId)) === null || _d === void 0 ? void 0 : _d.cards.pop();
+            await this.transfer_all_possible_card_from_attacker_deck_to_target_deck((_c = this.players[target_player].trash) === null || _c === void 0 ? void 0 : _c.value, (_d = this.players[source_card.playerId].getDeck(source_card.deckId)) === null || _d === void 0 ? void 0 : _d.cards, (_e = this.players[target_player].getDeck(target_deck)) === null || _e === void 0 ? void 0 : _e.cards);
+            // this.players[target_player]
+            //   .getDeck(target_deck)
+            //   ?.cards.unshift(source_card.value!);
+            // this.players[source_card.playerId!]
+            //   .getDeck(source_card.deckId!)
+            //   ?.cards.pop();
         }
         this.locations.push({
             latitude: this.latitute,
             longitude: this.longtitude,
         });
         await this.changeTurn();
+    }
+    async transfer_all_possible_card_from_attacker_deck_to_target_deck(selected_card, source_deck, target_deck) {
+        // move all the similar cards form button of source deck to the top of the target deck.
+        debugger;
+        while (target_deck.length < 8 &&
+            source_deck[source_deck.length - 1] == selected_card) {
+            target_deck.unshift(selected_card);
+            source_deck.pop();
+        }
     }
 }
 //# sourceMappingURL=Game.js.map

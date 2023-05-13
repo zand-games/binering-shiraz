@@ -4,7 +4,7 @@ import { Color } from './Trash';
 export class Deck {
   readonly playerId: number;
   readonly id: string;
-  cards: boolean[];
+  cards: boolean[] = [];
   constructor(playerId: number, deckId: string, cards: boolean[]) {
     this.playerId = playerId;
     this.id = deckId;
@@ -15,6 +15,9 @@ export class Deck {
     return parseInt(arr.map(r => (r ? '1' : '0')).join(''), 2);
   };
 
+  public getCards() {
+    return this.cards;
+  }
   public getDecimal() {
     // var a = [false, true, false, true];
     // var b: any = a.reduce((res, x) => (res << 1) | x);

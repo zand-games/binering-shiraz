@@ -3,6 +3,7 @@ import { Color } from './Trash';
 import { parseCardInfo } from '../utils';
 import { HtmlTagHydration } from 'svelte/internal';
 import { ComputerPlayer } from './ComputerPlay';
+import { Deck } from './Deck';
 export enum PlayeType {
   Single = 1,
   MultiPlayer = 2,
@@ -204,7 +205,10 @@ export class Game {
     target_player: number,
     target_deck: string
   ) {
+    debugger;
     const source_card = parseCardInfo(input);
+    console.log(source_card);
+
     if (source_card.dataIsValid == false) return;
 
     // it is not your turn to play
@@ -217,12 +221,18 @@ export class Game {
       this.players[target_player].getDeck(source_card.deckId!)?.cards.pop();
     } else {
       // moved from oponent
-      this.players[target_player]
-        .getDeck(target_deck)
-        ?.cards.unshift(source_card.value!);
-      this.players[source_card.playerId!]
-        .getDeck(source_card.deckId!)
-        ?.cards.pop();
+      await this.transfer_all_possible_card_from_attacker_deck_to_target_deck(
+        this.players[target_player].trash?.value!,
+        this.players[source_card.playerId!].getDeck(source_card.deckId!)
+          ?.cards!,
+        this.players[target_player].getDeck(target_deck)?.cards!
+      );
+      // this.players[target_player]
+      //   .getDeck(target_deck)
+      //   ?.cards.unshift(source_card.value!);
+      // this.players[source_card.playerId!]
+      //   .getDeck(source_card.deckId!)
+      //   ?.cards.pop();
     }
 
     this.locations.push({
@@ -230,5 +240,21 @@ export class Game {
       longitude: this.longtitude,
     });
     await this.changeTurn();
+  }
+
+  async transfer_all_possible_card_from_attacker_deck_to_target_deck(
+    selected_card: boolean,
+    source_deck: boolean[],
+    target_deck: boolean[]
+  ) {
+    // move all the similar cards form button of source deck to the top of the target deck.
+    debugger;
+    while (
+      target_deck.length < 8 &&
+      source_deck[source_deck.length - 1] == selected_card
+    ) {
+      target_deck.unshift(selected_card);
+      source_deck.pop();
+    }
   }
 }

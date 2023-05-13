@@ -17,7 +17,7 @@ export class Trash {
   constructor(playerId: number) {
     this.playerId = playerId;
   }
-  public get value() {
+  public get value(): boolean {
     return this.selectedCard == Color.True ? true : false;
   }
 
